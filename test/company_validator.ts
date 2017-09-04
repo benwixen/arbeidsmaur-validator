@@ -54,13 +54,15 @@ const companyReq: StartCompanyRequest = {
   address,
   totalCapital: 30000,
   numberOfShares: 100,
-  paymentDeadline: '2017-09-15',
+  paymentDeadline: new Date(),
   owners: [owner],
   board: [chair],
   ultimateBeneficialOwners: [owner],
   boardRightToSign: 'no',
   keyPersonellRightToSign: 'boardHead',
   banking,
+  mission: 'Lage programmer.',
+  activity: 'Koding'
 };
 
 describe('Company validator', () => {

@@ -1,4 +1,4 @@
-import {Address} from '../shared';
+import {Address, AuthedRequest} from '../shared';
 
 export declare namespace vinger {
 
@@ -75,6 +75,7 @@ export declare namespace vinger {
   }
 
   interface StartCompanyRequest {
+    id?: number
     companyName: string
     contactEmail: string
     contactName: string
@@ -83,7 +84,7 @@ export declare namespace vinger {
     activity: string
     totalCapital: number
     numberOfShares: number
-    paymentDeadline: string
+    paymentDeadline: Date
     owners: Array<PrivateOwner | CompanyOwner>
     board: Array<BoardMemberData | OwnedBoardMemberData>
     ultimateBeneficialOwners: Array<PrivateOwner | CompanyOwner>
@@ -99,4 +100,8 @@ export declare namespace vinger {
   }
 
   interface GetCompaniesInProgressRequest {}
+
+  interface GetVingerCompanyRequest extends AuthedRequest {
+    companyId: string
+  }
 }

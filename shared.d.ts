@@ -7,6 +7,10 @@ export interface BaseResponse {
   error?: ServerError
 }
 
+export interface AuthedRequest {
+  firebaseToken: string
+}
+
 export interface CurrentCompany {
   id: string
   name: string
