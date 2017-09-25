@@ -1,4 +1,4 @@
-import {Address, AuthedRequest} from '../shared';
+import {Address, AuthedRequest, BaseResponse} from '../shared';
 
 export declare namespace vinger {
 
@@ -97,6 +97,10 @@ export declare namespace vinger {
     accountantLastName?: string
     auditor?: string
     banking: BankingData
+  }
+
+  interface StartCompanyResponse extends BaseResponse {
+    documentAid: string
   }
 
   interface GetCompaniesInProgressRequest {}
