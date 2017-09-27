@@ -108,4 +108,13 @@ export declare namespace vinger {
   interface GetVingerCompanyRequest extends AuthedRequest {
     companyId: string
   }
+
+  interface GetVingerFormBasicStatusRequest {
+    stiftelsesDokAid: string
+  }
+
+  interface GetVingerFormBasicStatusResponse {
+    remainingSignatures: boolean
+    autoBanking: boolean
+  }
 }
