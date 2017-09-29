@@ -1,11 +1,10 @@
 import {CompanyValidator} from "../company_validator";
 import {vinger} from "../handlers/vinger_handlers";
-import PrivateOwner = vinger.PrivateOwner;
 import StartCompanyRequest = vinger.StartCompanyRequest;
-import {Address} from "../shared";
-import OwnedBoardMemberData = vinger.OwnedBoardMemberData;
-import BankingData = vinger.BankingData;
-import BoardMemberData = vinger.BoardMemberData;
+import {Address, VingerFormAttributes} from "../shared";
+import StartCompanyVingerForm = vinger.StartCompanyVingerForm;
+import Owner = vinger.Owner;
+import BoardMemberAttributes = vinger.BoardMemberAttributes;
 const chai = require('chai');
 const assert = chai.assert;
 
@@ -15,25 +14,26 @@ const address: Address = {
   zipCode: '7900',
   city: 'Rørvik',
 };
-const owner: PrivateOwner = {
-  id: 'abc123',
-  type: 'person',
+const entity: vinger.LegalEntityAttributes = {
   name: 'Preben Ludviksen',
   email: 'prebenl@gmail.com',
   idNumber: '05118639709',
   address,
-  numberOfShares: 100,
-  taxCountry: 'Norge',
-  americanCitizen: false,
 };
-const chair: OwnedBoardMemberData = {
-  type: 'owned',
-  owner: 'abc123',
+const owner: Owner = {
+  ...entity,
+  numberOfShares: 100,
+};
+const chair: BoardMemberAttributes = {
+  ...entity,
   role: 'Styreleder'
 };
-const banking: BankingData = {
+const vingerForm: StartCompanyVingerForm = {
   autoBanking: true,
-  contactId: 'abc123',
+  bankContactName: 'Preben Ludviksen',
+  bankContactIdNumber: '05118639709',
+  bankContactAddress: address,
+  bankContactEmail: 'prebenl@gmail.com',
   contactNumber: '90032017',
   contactTaxCountry: 'Norge',
   bankLogonPreference: 'bankid',
@@ -41,28 +41,34 @@ const banking: BankingData = {
   expectedMaxMonthlyRevenue: 10000,
   transfersAbroadPerMonth: 0,
   transfersAbroaderPerMonth: 0,
-  transfersAbroudAmountPerMonth: 0,
+  transfersAbroadAmountPerMonth: 0,
   transfersAbroadMaxTransactionAmount: 0,
-  transfersAbrouderAmountPerMonth: 0,
+  transfersAbroaderAmountPerMonth: 0,
   transfersAbroaderMaxTransactionAmount: 0,
   otherAgreementsExist: false,
-};
-const companyReq: StartCompanyRequest = {
-  companyName: 'Utvikler Ludviksen AS',
-  contactEmail: 'prebenl@gmail.com',
-  contactName: 'Preben Ludviksen',
-  address,
-  totalCapital: 30000,
-  numberOfShares: 100,
-  paymentDeadline: new Date(),
-  owners: [owner],
-  board: [chair],
-  ultimateBeneficialOwners: [owner],
+  beneficialOwners: [owner],
+  ultimateBeneficialOwners: '',
   boardRightToSign: 'no',
   keyPersonellRightToSign: 'boardHead',
-  banking,
-  mission: 'Lage programmer.',
-  activity: 'Koding'
+};
+const companyReq: StartCompanyRequest = {
+  status: 'draft',
+  name: 'Utvikler Ludviksen AS',
+  contactEmail: 'prebenl@gmail.com',
+  contactName: 'Preben Ludviksen',
+  businessAddress: address,
+  postalAddress: address,
+  shares: {
+    totalCapital: 30000,
+    numberOfShares: 100,
+    paymentDeadline: new Date(),
+    fromDate: new Date(),
+  },
+  owners: [owner],
+  board: [chair],
+  vingerForm,
+  companyMission: 'Lage programmer.',
+  companyActivity: 'Koding'
 };
 
 describe('Company validator', () => {
@@ -124,7 +130,7 @@ describe('Company validator', () => {
     assert.throws(() => {
       CompanyValidator.validateOwners(compReq);
     });
-    const halfOwner: PrivateOwner = { ...owner, numberOfShares: 50 };
+    const halfOwner: Owner = { ...owner, numberOfShares: 50 };
     compReq = { ...companyReq, owners: [halfOwner] };
     assert.throws(() => {
       CompanyValidator.validateOwners(compReq);
@@ -134,13 +140,12 @@ describe('Company validator', () => {
   });
 
   it('should have a chairman on the board', () => {
-    const board: Array<BoardMemberData | OwnedBoardMemberData> = [];
+    const board: Array<vinger.BoardMemberAttributes> = [];
     assert.throws(() => {
       CompanyValidator.validateBoard(board);
     });
     board.push({
-      type: 'owned',
-      owner: 'abc123',
+      ...entity,
       role: 'Styremedlem'
     });
     assert.throws(() => {

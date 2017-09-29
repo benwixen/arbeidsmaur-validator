@@ -1,102 +1,36 @@
-import {Address, AuthedRequest, BaseResponse} from '../shared';
+import {Address, AuthedRequest, BaseResponse, CompanyAttributes, VingerFormAttributes} from '../shared';
 
 export declare namespace vinger {
 
   interface LegalEntityAttributes {
-    id: string
+    idNumber: string
     name: string
+    email: string
+    address: Address
   }
 
-  interface CompanyOwner extends LegalEntityAttributes {
-    type: 'company'
-    email: string
-    idNumber: string
-    address: Address
+  // for returning data from system
+  interface Owner extends LegalEntityAttributes {
     numberOfShares: number
   }
 
-  interface PrivateOwner extends LegalEntityAttributes {
-    type: 'person'
-    email: string
-    idNumber: string
-    address: Address
-    numberOfShares: number
+  interface BeneficialOwner extends Owner {
     taxCountry: string
-    americanCitizen: boolean
-  }
-
-  interface OwnedBoardMemberData {
-    type: 'owned'
-    owner: string
-    role: string
+    americanTaxId?: string
   }
 
   interface BoardMemberAttributes extends LegalEntityAttributes {
-    email: string
-    idNumber: string
-    address: Address
     role: string
   }
 
-  interface BoardMemberData extends BoardMemberAttributes {
-    type: 'standalone'
+  interface StartCompanyVingerForm extends VingerFormAttributes {
+    beneficialOwners: Array<BeneficialOwner>
   }
 
-  interface BankingData {
-    autoBanking: boolean
-    contactId: string // owner, ceo or board member id
-    contactNumber: string
-    contactTaxCountry: string
-    contactAmericanTaxId?: string
-    bankLogonPreference: 'bankid' | 'kodebrikke'
-
-    capitalExpansionDesc?: string
-
-    expectedRevenue: number
-    expectedMaxMonthlyRevenue: number
-
-    transfersAbroadPerMonth: number
-    transfersAbroudAmountPerMonth: number
-    transfersAbroadMaxTransactionAmount: number
-
-    moneyTransfersAbroaderDesc?: string
-    moneyTransferCountries?: string
-    moneyTransferCurrencies?: string
-    transfersAbroaderPerMonth: number
-    transfersAbrouderAmountPerMonth: number
-    transfersAbroaderMaxTransactionAmount: number
-
-    parentCompanyName?: string
-    parentCompanyIdNumber?: string
-    parentCompanyStockExchange?: string
-    parentCompanyISIN?: string
-
-    otherAgreementsExist: boolean
-  }
-
-  interface StartCompanyRequest {
-    id?: number
-    companyName: string
-    contactEmail: string
-    contactName: string
-    address: Address
-    mission: string
-    activity: string
-    totalCapital: number
-    numberOfShares: number
-    paymentDeadline: Date
-    owners: Array<PrivateOwner | CompanyOwner>
-    board: Array<BoardMemberData | OwnedBoardMemberData>
-    ultimateBeneficialOwners: Array<PrivateOwner | CompanyOwner>
-    ceoId?: string,
-    ceoIdNumber?: string
-    ceoLastName?: string
-    boardRightToSign: string
-    keyPersonellRightToSign: string
-    accountant?: string
-    accountantLastName?: string
-    auditor?: string
-    banking: BankingData
+  interface StartCompanyRequest extends CompanyAttributes {
+    owners: Array<Owner>
+    board: Array<BoardMemberAttributes>
+    vingerForm: StartCompanyVingerForm
   }
 
   interface StartCompanyResponse extends BaseResponse {
