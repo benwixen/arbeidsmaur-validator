@@ -5,6 +5,7 @@ import {Address, VingerFormAttributes} from "../shared";
 import StartCompanyVingerForm = vinger.StartCompanyVingerForm;
 import Owner = vinger.Owner;
 import BoardMemberAttributes = vinger.BoardMemberAttributes;
+import BeneficialOwner = vinger.BeneficialOwner;
 const chai = require('chai');
 const assert = chai.assert;
 
@@ -23,6 +24,10 @@ const entity: vinger.LegalEntityAttributes = {
 const owner: Owner = {
   ...entity,
   numberOfShares: 100,
+};
+const beneficialOwner: BeneficialOwner = {
+  ...owner,
+  taxCountry: 'Norge',
 };
 const chair: BoardMemberAttributes = {
   ...entity,
@@ -46,7 +51,7 @@ const vingerForm: StartCompanyVingerForm = {
   transfersAbroaderAmountPerMonth: 0,
   transfersAbroaderMaxTransactionAmount: 0,
   otherAgreementsExist: false,
-  beneficialOwners: [owner],
+  beneficialOwners: [beneficialOwner],
   ultimateBeneficialOwners: '',
   boardRightToSign: 'no',
   keyPersonellRightToSign: 'boardHead',

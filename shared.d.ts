@@ -79,19 +79,19 @@ export interface VingerFormAttributes {
 
   capitalExpansionDesc?: string
 
-  expectedRevenue: number
-  expectedMaxMonthlyRevenue: number
+  expectedRevenue?: number
+  expectedMaxMonthlyRevenue?: number
 
-  transfersAbroadPerMonth: number
-  transfersAbroadAmountPerMonth: number
-  transfersAbroadMaxTransactionAmount: number
+  transfersAbroadPerMonth?: number
+  transfersAbroadAmountPerMonth?: number
+  transfersAbroadMaxTransactionAmount?: number
 
   moneyTransfersAbroaderDesc?: string
   moneyTransferCountries?: string
   moneyTransferCurrencies?: string
-  transfersAbroaderPerMonth: number
-  transfersAbroaderAmountPerMonth: number
-  transfersAbroaderMaxTransactionAmount: number
+  transfersAbroaderPerMonth?: number
+  transfersAbroaderAmountPerMonth?: number
+  transfersAbroaderMaxTransactionAmount?: number
 
   parentCompanyName?: string
   parentCompanyIdNumber?: string

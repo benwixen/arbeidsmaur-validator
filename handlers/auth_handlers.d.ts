@@ -53,11 +53,11 @@ export declare namespace auth {
   
   interface AuthenticateRequest {
     firebaseToken: string
-    oneTimeCode: string
+    oneTimeCode?: string
   }
 
   interface AuthenticateResponse extends BaseResponse {
-    currentCompany: CurrentCompany
+    currentCompany?: CurrentCompany
   }
 
   interface GetAccountDetailsRequest {
