@@ -17,7 +17,7 @@ const _constants = {
   bankLogonPreference: {
     bankid: 'bankid',
     kodebrikke: 'kodebrikke',
-  }
+  },
 };
 
 export const constants = _constants;
