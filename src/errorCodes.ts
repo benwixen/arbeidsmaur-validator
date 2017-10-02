@@ -13,6 +13,7 @@ const _errorCodes = {
 
   // signatures
   optimisticFailure: 'maur/optimistic-failure',
+  signatureNameMismatch: 'maur/signature-name-mismatch',
 };
 
 export const errorCodes = _errorCodes;

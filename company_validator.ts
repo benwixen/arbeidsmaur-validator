@@ -29,8 +29,8 @@ export class CompanyValidator {
       CompanyValidator.validateOwner(owner);
     }
     if (totalStock !== companyForm.shares.numberOfShares) {
-      throw new Error('Only ' + totalStock + ' of the companys ' + companyForm.shares.numberOfShares + ' where ' +
-        'accounted for in owners.');
+      throw new Error('Bare ' + totalStock + ' av selskapets ' + companyForm.shares.numberOfShares + ' aksjer ' +
+        'er fordelt.');
     }
   }
 
