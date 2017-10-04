@@ -57,6 +57,10 @@ export interface CompanyAttributes {
 
 export interface VingerFormAttributes {
   companyId?: number
+
+  foundationPlace: string
+  foundationTime?: Date
+
   ultimateBeneficialOwners: string // json-encoded
   ceoIdNumber?: string
   ceoLastName?: string
