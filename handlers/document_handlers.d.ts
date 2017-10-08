@@ -18,6 +18,7 @@ export declare namespace documents {
     idNumber: string
     signJobs: SignJob[]
     mock: boolean
+    userAgent: string
   }
 
   interface InitSignSessionResponse extends BaseResponse {
