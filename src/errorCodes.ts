@@ -14,6 +14,7 @@ const _errorCodes = {
   // signatures
   optimisticFailure: 'maur/optimistic-failure',
   signatureNameMismatch: 'maur/signature-name-mismatch',
+  alreadySigned: 'maur/already-signed'
 };
 
 export const errorCodes = _errorCodes;

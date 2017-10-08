@@ -34,7 +34,7 @@ export declare namespace vinger {
   }
 
   interface StartCompanyResponse extends BaseResponse {
-    documentAid: string
+    signJobAids: string[]
   }
 
   interface GetCompaniesInProgressRequest {}
