@@ -11,7 +11,6 @@ export declare namespace documents {
     documentAid: string
     documentName: string
     signJobAid: string
-    signableName: string
   }
 
   interface InitSignSessionRequest2 {
@@ -30,6 +29,31 @@ export declare namespace documents {
   interface MockSignRequest {
     signName: string
     sessionId: string
+  }
+
+  interface AddSignaturesRequest {
+    signeeName: string
+    documents: [{
+      documentAid: string
+      signJobAid: string
+      b64signature: string
+      b64ocsp: string
+    }]
+  }
+
+  interface SignedDocument {
+    documentAid: string
+    signatures: Signature[]
+  }
+
+  interface Signature {
+    companyName?: string
+    b64signature: string
+    b64ocsp: string
+  }
+
+  interface AddSignaturesResponse extends BaseResponse {
+    readyDocuments: SignedDocument[]
   }
 
   interface SessionStatusRequest {
