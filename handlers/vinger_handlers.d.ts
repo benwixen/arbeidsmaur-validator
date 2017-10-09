@@ -7,6 +7,8 @@ export declare namespace vinger {
     name: string
     email: string
     address: Address
+    contactName?: string // for companies
+    contactIdNumber?: string // for companies
   }
 
   // for returning data from system

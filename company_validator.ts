@@ -38,7 +38,13 @@ export class CompanyValidator {
     CompanyValidator.validatePersonFullName(owner.name);
     CompanyValidator.validateEmail(owner.email);
     CompanyValidator.validateAddress(owner.address);
-    if (!owner.idNumber) throw new Error('Mangler personnummer.');
+    if (!owner.idNumber) throw new Error('Mangler personnummer/org-nummer for eier: ' + owner.name);
+    CompanyValidator.validateIdNumber(owner.idNumber, owner.name);
+    if (CompanyValidator.isIdNumberCompany(owner.idNumber)) {
+      if (!owner.contactName) throw new Error('Mangler kontaktperson for eier: ' + owner.name);
+      if (!owner.contactIdNumber) throw new Error('Mangler fødselsnummer for kontaktperson: ' + owner.name);
+      CompanyValidator.validateIdNumber(owner.contactIdNumber, owner.contactName);
+    }
   }
 
   static validateBoard(board: Array<BoardMemberAttributes>) {
