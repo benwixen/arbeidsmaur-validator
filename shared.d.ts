@@ -7,8 +7,13 @@ export interface BaseResponse {
   error?: ServerError
 }
 
-export interface AuthedRequest {
+export interface AuthTokens {
   firebaseToken: string
+  maurToken: string
+}
+
+export interface AuthedRequest {
+  authTokens: AuthTokens
 }
 
 export interface CurrentCompany {

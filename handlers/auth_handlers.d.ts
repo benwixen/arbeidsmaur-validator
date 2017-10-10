@@ -1,4 +1,4 @@
-import {BaseResponse, CurrentCompany, CompanyPaymentDetails, PostalAddress} from '../shared';
+import {BaseResponse, CurrentCompany, CompanyPaymentDetails, PostalAddress, AuthedRequest} from '../shared';
 
 export declare namespace auth {
   interface ActivationCodeToEmailRequest {
@@ -58,11 +58,10 @@ export declare namespace auth {
 
   interface AuthenticateResponse extends BaseResponse {
     currentCompany?: CurrentCompany
+    maurToken: string // JSON Web Token with permsissions, to improve authorization performance
   }
 
-  interface GetAccountDetailsRequest {
-    firebaseToken: string
-  }
+  interface GetAccountDetailsRequest extends AuthedRequest {}
   
   interface AuthAccountDetails {
     provider: string
@@ -75,9 +74,8 @@ export declare namespace auth {
     authAccounts: AuthAccountDetails[]
   }
 
-  interface GetCompanyDetailsRequest {
-    firebaseToken: string
-    companyId: string
+  interface GetCompanyDetailsRequest extends AuthedRequest {
+    companyId: number
   }
 
   interface GetCompanyDetailsResponse extends BaseResponse {
