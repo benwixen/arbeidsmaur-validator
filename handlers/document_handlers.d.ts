@@ -1,6 +1,9 @@
-import {BaseResponse} from "../shared";
+import {AuthedRequest, BaseResponse} from "../shared";
+import {vinger} from "./vinger_handlers";
 
 export declare namespace documents {
+
+  import LegalEntityAttributes = vinger.LegalEntityAttributes;
 
   interface InitSignSessionRequest {
     signJobAids: string[]
@@ -62,5 +65,12 @@ export declare namespace documents {
 
   interface SessionStatusResponse extends BaseResponse {
     message: string
+  }
+
+  interface EntitySignStatus {
+    signeeName: string
+    companyName?: string
+    signed: boolean
+    signUrl: string
   }
 }

@@ -1,6 +1,9 @@
 import {Address, AuthedRequest, BaseResponse, CompanyAttributes, VingerFormAttributes} from '../shared';
+import {documents} from "./document_handlers";
 
 export declare namespace vinger {
+
+  import EntitySignStatus = documents.EntitySignStatus;
 
   interface LegalEntityAttributes {
     idNumber: string
@@ -52,5 +55,14 @@ export declare namespace vinger {
   interface GetVingerFormBasicStatusResponse {
     remainingSignatures: boolean
     autoBanking: boolean
+  }
+
+  interface GetVingerSignStatusRequest extends AuthedRequest {
+    companyId: number
+  }
+
+  interface GetVingerSignStatusResponse extends BaseResponse {
+    owners: EntitySignStatus[]
+    board: EntitySignStatus[]
   }
 }

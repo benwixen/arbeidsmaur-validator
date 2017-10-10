@@ -21,14 +21,14 @@ export declare namespace payment {
 
   interface CancelSubscriptionRequest {
     firebaseToken: string 
-    companyId: string
+    companyId: number
   }
 
   interface CancelSubscriptionResponse extends BaseResponse {}
 
   interface ResumeSubscriptionRequest {
     firebaseToken: string
-    companyId: string
+    companyId: number
   }
 
   interface ResumeSubscriptionResponse extends BaseResponse {}
@@ -36,7 +36,7 @@ export declare namespace payment {
   interface RestartSubscriptionRequest {
     stripeToken: string
     firebaseToken: string
-    companyId: string
+    companyId: number
   }
 
   interface RestartSubscriptionResponse extends BaseResponse {}

@@ -8,6 +8,7 @@ const _errorCodes = {
   authNotLinked: 'maur/auth-not-linked',
   userNotFound: 'maur/user-not-found',
   invalidActivationCode: 'maur/invalid-activation-code',
+  authAccountLinkedToOtherUser: 'maur/auth-account-linked-to-other-user',
   noAuthToken: 'maur/no-auth-token',
   notAuthorized: 'maur/not-authorized',
 

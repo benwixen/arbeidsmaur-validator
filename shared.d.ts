@@ -12,8 +12,9 @@ export interface AuthedRequest {
 }
 
 export interface CurrentCompany {
-  id: string
+  id: number
   name: string
+  status: CompanyStatus
 }
 
 export interface CompanyPaymentDetails {
@@ -36,9 +37,12 @@ export interface Address extends PostalAddress{
   country: string
 }
 
+export type CompanyStatus = 'draft' | 'wait_sig' | 'bank_pre' | 'bank_wait'
+  | 'altinn_pre' | 'altinn_wait' | 'registered';
+
 export interface CompanyAttributes {
   id?: number
-  status: 'draft' | 'bank_pre' | 'bank_wait' | 'altinn_pre' | 'altinn_wait' | 'registered'
+  status: CompanyStatus
   stripeId?: string
   organizationNumber?: string
   name: string
