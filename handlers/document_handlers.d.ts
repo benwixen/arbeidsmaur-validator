@@ -17,6 +17,7 @@ export declare namespace documents {
   }
 
   interface InitSignSessionRequest2 {
+    companyId: number
     idNumber: string
     signJobs: SignJob[]
     mock: boolean
@@ -35,6 +36,7 @@ export declare namespace documents {
   }
 
   interface AddSignaturesRequest {
+    companyId: number
     signeeName: string
     documents: [{
       documentAid: string
