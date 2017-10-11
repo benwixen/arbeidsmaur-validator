@@ -42,7 +42,7 @@ export interface Address extends PostalAddress{
   country: string
 }
 
-export type CompanyStatus = 'draft' | 'wait_sig' | 'bank_pre' | 'bank_wait'
+export type CompanyStatus = 'draft' | 'wait_sig' | 'bank_pre' | 'bank_wait_sig' | 'bank_wait_acc'| 'bank_wait_money'
   | 'altinn_pre' | 'altinn_wait' | 'registered';
 
 export interface CompanyAttributes {
