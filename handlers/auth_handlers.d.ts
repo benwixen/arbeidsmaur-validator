@@ -54,6 +54,7 @@ export declare namespace auth {
   interface AuthenticateRequest {
     firebaseToken: string
     oneTimeCode?: string
+    providerEmail?: string
   }
 
   interface AuthenticateResponse extends BaseResponse {

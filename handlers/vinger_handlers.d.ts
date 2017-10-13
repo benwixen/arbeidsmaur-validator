@@ -45,7 +45,16 @@ export declare namespace vinger {
   interface GetCompaniesInProgressRequest {}
 
   interface GetVingerCompanyRequest extends AuthedRequest {
-    companyId: string
+    companyId: number
+  }
+
+  interface VingerCompanyResponseForm extends vinger.StartCompanyVingerForm {
+    forwardEmail: string
+
+  }
+
+  interface GetVingerCompanyResponse extends vinger.StartCompanyRequest, BaseResponse {
+    vingerForm: VingerCompanyResponseForm
   }
 
   interface GetVingerFormBasicStatusRequest {
@@ -65,4 +74,13 @@ export declare namespace vinger {
     owners: EntitySignStatus[]
     board: EntitySignStatus[]
   }
+
+  interface GetVingerBankSignUrlRequest extends AuthedRequest{
+    companyId: number
+  }
+
+  interface GetVingerBankSignUrlResponse extends BaseResponse{
+    signUrl: string
+  }
+
 }
