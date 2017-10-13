@@ -258,6 +258,7 @@ export class CompanyValidator {
       CompanyValidator.validatePersonNumber(vingerForm.bankContactIdNumber);
       if (!vingerForm.bankContactEmail) throw new Error('Mangler e-post for bankkontakt.');
       CompanyValidator.validateEmail(vingerForm.bankContactEmail);
+      if (!vingerForm.bankContactAddress) throw new Error('Mangler adresse for bankkontakt.');
       if (!vingerForm.contactNumber) throw new Error('Mangler telefonnummer for bankkontakt.');
       CompanyValidator.validatePhoneNumber(vingerForm.contactNumber);
       if (!vingerForm.contactTaxCountry) throw new Error('Mangler skattemessig hjemland for bankkontakt.');

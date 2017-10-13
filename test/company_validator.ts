@@ -55,6 +55,7 @@ const vingerForm: StartCompanyVingerForm = {
   ultimateBeneficialOwners: '',
   boardRightToSign: 'no',
   keyPersonellRightToSign: 'boardHead',
+  foundationPlace: 'internett',
 };
 const companyReq: StartCompanyRequest = {
   status: 'draft',
