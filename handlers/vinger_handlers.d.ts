@@ -83,4 +83,17 @@ export declare namespace vinger {
     signUrl: string
   }
 
+  interface GetReportSharesNameRequest {
+    shareTransactionAid: string
+  }
+
+  interface GetReportSharesNameResponse extends BaseResponse {
+    name: string
+  }
+
+  interface ReportSharesPaidRequest {
+    shareTransactionAid: string
+  }
+
+  interface ReportSharesPaidResponse extends BaseResponse {}
 }
