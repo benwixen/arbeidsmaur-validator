@@ -96,4 +96,18 @@ export declare namespace vinger {
   }
 
   interface ReportSharesPaidResponse extends BaseResponse {}
+
+  interface GetVingerPaymentStatusRequest extends AuthedRequest {
+    companyId: number
+  }
+
+  interface BankPaymentStatus {
+    name: string
+    paidDate?: Date
+    confirmPayUrl: string
+  }
+
+  interface GetVingerPaymentStatusResponse extends BaseResponse {
+    founders: BankPaymentStatus
+  }
 }

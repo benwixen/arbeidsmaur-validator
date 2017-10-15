@@ -43,7 +43,8 @@ export interface Address extends PostalAddress{
 }
 
 export type CompanyStatus = 'draft' | 'wait_sig' | 'bank_pre' | 'bank_wait_contract' | 'bank_wait_sig' |
-  'bank_wait_acc'| 'bank_wait_money' | 'bank_wait_confirm' | 'altinn_pre' | 'altinn_wait' | 'registered';
+  'bank_wait_acc'| 'bank_wait_money' | 'bank_wait_confirm' | 'altinn_pre' | 'altinn_wait_sig' |
+  'altinn_wait_confirm' | 'registered';
 
 export interface CompanyAttributes {
   id?: number
