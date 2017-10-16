@@ -15,6 +15,10 @@ describe('utils', () => {
     assert.equal(formatted, '52 000 kr');
     formatted = formatMoney(1600000);
     assert.equal(formatted, '1 600 000 kr');
+    formatted = formatMoney(23800000);
+    assert.equal(formatted, '23 800 000 kr');
+    formatted = formatMoney(4523800000);
+    assert.equal(formatted, '4523 800 000 kr');
   });
 
   it('should format a date properly', () => {
