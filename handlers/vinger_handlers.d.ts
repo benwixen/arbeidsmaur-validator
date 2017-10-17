@@ -50,11 +50,16 @@ export declare namespace vinger {
 
   interface VingerCompanyResponseForm extends vinger.StartCompanyVingerForm {
     forwardEmail: string
+  }
 
+  interface VingerCompanyResponseBoardMember extends BoardMemberAttributes {
+    entityId: number
+    signedRegMeld?: Date
   }
 
   interface GetVingerCompanyResponse extends vinger.StartCompanyRequest, BaseResponse {
     vingerForm: VingerCompanyResponseForm
+    board: VingerCompanyResponseBoardMember[]
   }
 
   interface GetVingerFormBasicStatusRequest {
@@ -114,4 +119,18 @@ export declare namespace vinger {
   interface ReportRegMeldCreated extends AuthedRequest {
     companyId: number
   }
+
+  interface MarkRegMeldSignedRequest extends AuthedRequest {
+    companyId: number
+    signeeId: number
+  }
+
+  interface GetRegMeldSignStatusRequest extends AuthedRequest {
+    companyId: number
+  }
+
+  interface GetRegMeldSignStatusResponse extends BaseResponse {
+    board: EntitySignStatus[]
+  }
+
 }
