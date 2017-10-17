@@ -110,4 +110,8 @@ export declare namespace vinger {
   interface GetVingerPaymentStatusResponse extends BaseResponse {
     founders: BankPaymentStatus[]
   }
+
+  interface ReportRegMeldCreated extends AuthedRequest {
+    companyId: number
+  }
 }
