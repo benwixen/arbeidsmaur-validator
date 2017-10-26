@@ -3,7 +3,6 @@ import {vinger} from "./vinger_handlers";
 
 export declare namespace documents {
 
-  import LegalEntityAttributes = vinger.LegalEntityAttributes;
 
   interface InitSignSessionRequest {
     signJobAids: string[]

@@ -1,40 +1,90 @@
-import {Address, AuthedRequest, BaseResponse, CompanyAttributes, VingerFormAttributes} from '../shared';
+import {Address, AuthedRequest, BaseResponse, CompanyAttributes, LegalEntity} from '../shared';
 import {documents} from "./document_handlers";
+import {board} from "./board_handlers";
 
 export declare namespace vinger {
 
   import EntitySignStatus = documents.EntitySignStatus;
+  import BoardMemberAttributes = board.BoardMemberAttributes;
+  import BoardMember = board.BoardMember;
 
-  interface LegalEntityAttributes {
+  interface FounderAttributes {
     idNumber: string
-    name: string
-    email: string
-    address: Address
-    contactName?: string // for companies
-    contactIdNumber?: string // for companies
-  }
-
-  // for returning data from system
-  interface Owner extends LegalEntityAttributes {
     numberOfShares: number
   }
 
-  interface BeneficialOwner extends Owner {
+  interface Founder extends FounderAttributes, LegalEntity {}
+
+  interface BeneficialOwnerAttributes {
+    idNumber: string
     taxCountry: string
+    foreignTaxId?: string
     americanTaxId?: string
   }
 
-  interface BoardMemberAttributes extends LegalEntityAttributes {
-    role: string
-  }
+  interface BeneficialOwner extends BeneficialOwnerAttributes, LegalEntity {}
 
   interface StartCompanyVingerForm extends VingerFormAttributes {
-    beneficialOwners: Array<BeneficialOwner>
+    beneficialOwners: BeneficialOwnerAttributes[]
   }
 
+  // db-compliant
+  export interface VingerFormAttributes {
+    companyId?: number
+
+    foundationPlace: string
+    foundationTime?: Date
+
+    ultimateBeneficialOwners: string // json-encoded
+    ceoIdNumber?: string
+    ceoLastName?: string
+    boardRightToSign: string
+    keyPersonellRightToSign: string
+    accountantIdNumber?: string
+    accountantLastName?: string
+    auditorIdNumber?: string
+
+    autoBanking: boolean
+
+    bankContactName: string
+    bankContactIdNumber: string
+    bankContactAddress: Address
+    bankContactEmail: string
+    contactNumber: string
+    contactTaxCountry: string
+    contactAmericanTaxId?: string
+    bankLogonPreference: string
+
+    capitalExpansionDesc?: string
+
+    expectedRevenue?: number
+    expectedMaxMonthlyRevenue?: number
+
+    transfersAbroadPerMonth?: number
+    transfersAbroadAmountPerMonth?: number
+    transfersAbroadMaxTransactionAmount?: number
+
+    moneyTransfersAbroaderDesc?: string
+    moneyTransferCountries?: string
+    moneyTransferCurrencies?: string
+    transfersAbroaderPerMonth?: number
+    transfersAbroaderAmountPerMonth?: number
+    transfersAbroaderMaxTransactionAmount?: number
+
+    parentCompanyName?: string
+    parentCompanyIdNumber?: string
+    parentCompanyStockExchange?: string
+    parentCompanyISIN?: string
+
+    otherAgreementsExist: boolean
+  }
+
+  /* Request and response specs */
+
   interface StartCompanyRequest extends CompanyAttributes {
-    owners: Array<Owner>
-    board: Array<BoardMemberAttributes>
+    entities: LegalEntity[]
+    founders: FounderAttributes[]
+    board: BoardMemberAttributes[]
     vingerForm: StartCompanyVingerForm
   }
 
@@ -49,15 +99,17 @@ export declare namespace vinger {
   }
 
   interface VingerCompanyResponseForm extends vinger.StartCompanyVingerForm {
+    beneficialOwners: BeneficialOwner[]
     forwardEmail: string
   }
 
-  interface VingerCompanyResponseBoardMember extends BoardMemberAttributes {
+  interface VingerCompanyResponseBoardMember extends BoardMember {
     entityId: number
     signedRegMeld?: Date
   }
 
   interface GetVingerCompanyResponse extends vinger.StartCompanyRequest, BaseResponse {
+    founders: Founder[]
     vingerForm: VingerCompanyResponseForm
     board: VingerCompanyResponseBoardMember[]
   }

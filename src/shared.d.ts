@@ -1,3 +1,7 @@
+import {EntityType} from "./enums";
+import {vinger} from "./handler_specs/vinger_handlers";
+import VingerFormAttributes = vinger.VingerFormAttributes;
+
 export interface ServerError {
   code: string
   message: string
@@ -31,6 +35,18 @@ export interface CompanyPaymentDetails {
   nextCharge: string
 }
 
+interface LegalEntity {
+  type: EntityType
+  idNumber: string // populated with birthdate for people in public-facing APIs
+  name: string
+  email: string
+  address: Address
+
+  contactName?: string // for companies
+  contactIdNumber?: string // for companies
+}
+
+
 export interface PostalAddress {
   zipCode: string
   city: string
@@ -63,56 +79,6 @@ export interface CompanyAttributes {
   shares: CompanySharesAttributes
 
   vingerForm?: VingerFormAttributes
-}
-
-export interface VingerFormAttributes {
-  companyId?: number
-
-  foundationPlace: string
-  foundationTime?: Date
-
-  ultimateBeneficialOwners: string // json-encoded
-  ceoIdNumber?: string
-  ceoLastName?: string
-  boardRightToSign: string
-  keyPersonellRightToSign: string
-  accountantIdNumber?: string
-  accountantLastName?: string
-  auditorIdNumber?: string
-
-  autoBanking: boolean
-
-  bankContactName: string
-  bankContactIdNumber: string
-  bankContactAddress: Address
-  bankContactEmail: string
-  contactNumber: string
-  contactTaxCountry: string
-  contactAmericanTaxId?: string
-  bankLogonPreference: string
-
-  capitalExpansionDesc?: string
-
-  expectedRevenue?: number
-  expectedMaxMonthlyRevenue?: number
-
-  transfersAbroadPerMonth?: number
-  transfersAbroadAmountPerMonth?: number
-  transfersAbroadMaxTransactionAmount?: number
-
-  moneyTransfersAbroaderDesc?: string
-  moneyTransferCountries?: string
-  moneyTransferCurrencies?: string
-  transfersAbroaderPerMonth?: number
-  transfersAbroaderAmountPerMonth?: number
-  transfersAbroaderMaxTransactionAmount?: number
-
-  parentCompanyName?: string
-  parentCompanyIdNumber?: string
-  parentCompanyStockExchange?: string
-  parentCompanyISIN?: string
-
-  otherAgreementsExist: boolean
 }
 
 interface CompanySharesAttributes {

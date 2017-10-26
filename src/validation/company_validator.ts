@@ -1,32 +1,56 @@
-import {vinger} from "./handlers/vinger_handlers";
+import {vinger} from "../handler_specs/vinger_handlers";
 import StartCompanyRequest = vinger.StartCompanyRequest;
-import {Address, VingerFormAttributes} from "./shared";
-import {counties, countries} from './src/data/countries';
-import {constants} from "./src/constants";
-import {unescape} from "querystring";
-import StartCompanyVingerForm = vinger.StartCompanyVingerForm;
-import Owner = vinger.Owner;
-import BoardMemberAttributes = vinger.BoardMemberAttributes;
+import {Address, LegalEntity} from "../shared";
+import {counties, countries} from '../data/countries';
+import {constants} from "../constants";
+import {board} from "../handler_specs/board_handlers";
+import BoardMemberAttributes = board.BoardMemberAttributes;
+import BeneficialOwnerAttributes = vinger.BeneficialOwnerAttributes;
+
+function throwError(message: string, description?: string) {
+  const desc = description ? `${description}: ` : '';
+  throw new Error(`${desc}${message}`)
+}
 
 export class CompanyValidator {
 
   static validateCompanyForm(companyForm: StartCompanyRequest) {
     CompanyValidator.validateCompanyCapital(companyForm.shares.totalCapital);
     if (!companyForm.contactName) throw new Error('Mangler navn på kontaktperson.');
-    CompanyValidator.validatePersonFullName(companyForm.contactName);
+    CompanyValidator.validateEntityName(companyForm.contactName);
     CompanyValidator.validateEmail(companyForm.contactEmail);
     CompanyValidator.validateCompanyName(companyForm.name);
-    CompanyValidator.validateOwners(companyForm);
+    CompanyValidator.validateLegalEntities(companyForm.entities);
+    CompanyValidator.validateFounders(companyForm);
     CompanyValidator.validateBoard((companyForm.board));
     CompanyValidator.validateVingerForm(companyForm);
   }
 
-  static validateOwners(companyForm: StartCompanyRequest) {
-    if (!companyForm.owners || !companyForm.owners.length) throw new Error('Mangler eiere.');
+  static validateLegalEntities(entities: LegalEntity[]) {
+    for (const entity of entities) {
+      CompanyValidator.validateLegalEntity(entity);
+    }
+  }
+
+  static validateLegalEntity(entity: LegalEntity) {
+    if (!entity.type) throw new Error('Mangler type for person/selskap.');
+    CompanyValidator.validateEntityName(entity.name);
+    CompanyValidator.validateEmail(entity.email);
+    CompanyValidator.validateAddress(entity.address, entity.name);
+    if (!entity.idNumber) throw new Error('Mangler personnummer/org-nummer for: ' + entity.name);
+    CompanyValidator.validateIdNumber(entity.idNumber, entity.name);
+    if (CompanyValidator.isIdNumberCompany(entity.idNumber)) {
+      if (!entity.contactName) throw new Error('Mangler kontaktperson for selskap: ' + entity.name);
+      if (!entity.contactIdNumber) throw new Error('Mangler fødselsnummer for kontaktperson: ' + entity.name);
+      CompanyValidator.validateIdNumber(entity.contactIdNumber, entity.contactName);
+    }
+  }
+
+  static validateFounders(companyForm: StartCompanyRequest) {
+    if (!companyForm.founders || !companyForm.founders.length) throw new Error('Mangler eiere.');
     let totalStock = 0;
-    for (const owner of companyForm.owners) {
+    for (const owner of companyForm.founders) {
       totalStock += owner.numberOfShares;
-      CompanyValidator.validateOwner(owner);
     }
     if (totalStock !== companyForm.shares.numberOfShares) {
       throw new Error('Bare ' + totalStock + ' av selskapets ' + companyForm.shares.numberOfShares + ' aksjer ' +
@@ -34,20 +58,7 @@ export class CompanyValidator {
     }
   }
 
-  static validateOwner(owner: Owner) {
-    CompanyValidator.validatePersonFullName(owner.name);
-    CompanyValidator.validateEmail(owner.email);
-    CompanyValidator.validateAddress(owner.address);
-    if (!owner.idNumber) throw new Error('Mangler personnummer/org-nummer for eier: ' + owner.name);
-    CompanyValidator.validateIdNumber(owner.idNumber, owner.name);
-    if (CompanyValidator.isIdNumberCompany(owner.idNumber)) {
-      if (!owner.contactName) throw new Error('Mangler kontaktperson for eier: ' + owner.name);
-      if (!owner.contactIdNumber) throw new Error('Mangler fødselsnummer for kontaktperson: ' + owner.name);
-      CompanyValidator.validateIdNumber(owner.contactIdNumber, owner.contactName);
-    }
-  }
-
-  static validateBoard(board: Array<BoardMemberAttributes>) {
+  static validateBoard(board: BoardMemberAttributes[]) {
     if (!board || board.length === 0) throw new Error('Mangler styreleder i styret.');
     let foundDirector = false;
     for (const member of board) {
@@ -58,7 +69,7 @@ export class CompanyValidator {
     if (!foundDirector) throw new Error('Mangler styreleder i styret.');
   }
 
-  static _isBeneficialOwner(idNumber: string, beneficialOwners: Owner[]) {
+  private static isBeneficialOwner(idNumber: string, beneficialOwners: BeneficialOwnerAttributes[]) {
     for (const beneficialOwner of beneficialOwners) {
       if (beneficialOwner.idNumber === idNumber) {
         return true;
@@ -69,40 +80,36 @@ export class CompanyValidator {
 
   static validateBeneficialOwners(companyForm: StartCompanyRequest) {
     const pct25 = companyForm.shares.numberOfShares / 4;
-    for (const owner of companyForm.owners) {
+    for (const owner of companyForm.founders) {
       if (owner.numberOfShares >= pct25) {
-        if (!CompanyValidator._isBeneficialOwner(owner.idNumber, companyForm.vingerForm.beneficialOwners)) {
+        if (!CompanyValidator.isBeneficialOwner(owner.idNumber, companyForm.vingerForm.beneficialOwners)) {
           throw new Error(`Eier med id-nummer ${owner.idNumber} eier 25% eller mer av selskapet, men er ikke `
             + 'lagt inn som reell rettighetshaver.');
         }
       }
     }
-    for (const beneficialOwner of companyForm.vingerForm.beneficialOwners) {
-      CompanyValidator.validateOwner(beneficialOwner);
-    }
   }
 
 
-  static validateAddress(address: Address) {
-    if (!address) throw new Error('Mangler adresse.');
-    if (!address.addressLine1) throw new Error('Mangler gateadresse.');
-    if (!address.country) throw new Error('Mangler land.');
-    if (!address.city) throw new Error('Mangler poststed.');
-    if (!address.zipCode) throw new Error('Mangler postnummer.');
+  static validateAddress(address: Address, desc?: string) {
+    if (!address) throwError('Mangler adresse.', desc);
+    if (!address.addressLine1) throwError('Mangler gateadresse.', desc);
+    if (!address.country) throwError('Mangler land.', desc);
+    if (!address.city) throwError('Mangler poststed.', desc);
+    if (!address.zipCode) throwError('Mangler postnummer.', desc);
   }
 
-  static validatePersonFullName(name: string) {
+  static validateEntityName(name: string) {
     if (!name) throw new Error('Mangler navn.');
   }
 
-  static validateIdNumber(idNumber: string, description?: string) {
+  static validateIdNumber(idNumber: string, desc?: string) {
     if (idNumber.length === 9) {
-      CompanyValidator.validateOrganisationNumber(idNumber, description);
+      CompanyValidator.validateOrganisationNumber(idNumber, desc);
     } else if (idNumber.length === 11) {
-      CompanyValidator.validatePersonNumber(idNumber, description);
+      CompanyValidator.validatePersonNumber(idNumber, desc);
     } else {
-      const desc = description ? `${description}: ` : '';
-      throw new Error(`${desc}Personnummer må være nøyaktig 11 siffer, og org-nummer må være nøyaktig 9 siffer.`)
+      throwError('Personnummer må være nøyaktig 11 siffer, og org-nummer må være nøyaktig 9 siffer.', desc);
     }
   }
 
@@ -253,7 +260,7 @@ export class CompanyValidator {
       }
 
       if (!vingerForm.bankContactName) throw new Error('Mangler navn på bankkontakt.');
-      CompanyValidator.validatePersonFullName(vingerForm.bankContactName);
+      CompanyValidator.validateEntityName(vingerForm.bankContactName);
       if (!vingerForm.bankContactIdNumber) throw new Error('Mangler personnummer for bankkontakt.');
       CompanyValidator.validatePersonNumber(vingerForm.bankContactIdNumber);
       if (!vingerForm.bankContactEmail) throw new Error('Mangler e-post for bankkontakt.');

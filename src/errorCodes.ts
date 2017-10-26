@@ -2,6 +2,7 @@ const _errorCodes = {
 
   internalSystemError: 'maur/internal-system-error',
   invalidArgument: 'maur/invalid-argument',
+  networkError: 'maur/network-error',
 
   // authentication
   emailNotRegistered: 'maur/email-not-registered',
@@ -15,7 +16,13 @@ const _errorCodes = {
   // signatures
   optimisticFailure: 'maur/optimistic-failure',
   signatureNameMismatch: 'maur/signature-name-mismatch',
-  alreadySigned: 'maur/already-signed'
+  alreadySigned: 'maur/already-signed',
+
+  // shareholders
+  shareholdersBookNotCreated: 'maur/shareholder-book-not-created',
+
+  // firebase
+  authRequestFailed: 'auth/network-request-failed'
 };
 
 export const errorCodes = _errorCodes;

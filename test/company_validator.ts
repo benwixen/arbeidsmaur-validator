@@ -1,11 +1,12 @@
-import {CompanyValidator} from "../company_validator";
-import {vinger} from "../handlers/vinger_handlers";
+import {CompanyValidator} from "../src/validation/company_validator";
+import {vinger} from "../src/handler_specs/vinger_handlers";
 import StartCompanyRequest = vinger.StartCompanyRequest;
-import {Address, VingerFormAttributes} from "../shared";
+import {Address, LegalEntity} from "../src/shared";
 import StartCompanyVingerForm = vinger.StartCompanyVingerForm;
-import Owner = vinger.Owner;
+import Owner = vinger.FounderAttributes;
 import BoardMemberAttributes = vinger.BoardMemberAttributes;
-import BeneficialOwner = vinger.BeneficialOwner;
+import BeneficialOwner = vinger.BeneficialOwnerAttributes;
+import {EntityType} from "../src/enums";
 const chai = require('chai');
 const assert = chai.assert;
 
@@ -15,7 +16,8 @@ const address: Address = {
   zipCode: '7900',
   city: 'Rørvik',
 };
-const entity: vinger.LegalEntityAttributes = {
+const entity: LegalEntity = {
+  type: EntityType.Person,
   name: 'Preben Ludviksen',
   email: 'prebenl@gmail.com',
   idNumber: '05118639709',
@@ -70,7 +72,7 @@ const companyReq: StartCompanyRequest = {
     paymentDeadline: new Date(),
     fromDate: new Date(),
   },
-  owners: [owner],
+  founders: [owner],
   board: [chair],
   vingerForm,
   companyMission: 'Lage programmer.',
@@ -134,15 +136,15 @@ describe('Company validator', () => {
     let compReq = { ...companyReq, owners: [owner, owner] };
     // 100% of stock should be accounted for
     assert.throws(() => {
-      CompanyValidator.validateOwners(compReq);
+      CompanyValidator.validateFounders(compReq);
     });
     const halfOwner: Owner = { ...owner, numberOfShares: 50 };
     compReq = { ...companyReq, owners: [halfOwner] };
     assert.throws(() => {
-      CompanyValidator.validateOwners(compReq);
+      CompanyValidator.validateFounders(compReq);
     });
 
-    CompanyValidator.validateOwners(companyReq);
+    CompanyValidator.validateFounders(companyReq);
   });
 
   it('should have a chairman on the board', () => {
