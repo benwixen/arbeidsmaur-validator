@@ -38,6 +38,7 @@ export declare namespace documents {
     companyId: number
     signeeName: string
     documents: [{
+      signTime: Date // utc sign time
       documentAid: string
       signJobAid: string
       b64signature: string

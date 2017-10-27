@@ -71,6 +71,7 @@ export interface CompanyAttributes {
   contactName: string
   contactEmail: string
 
+  foundationDate: Date
   companyMission: string
   companyActivity: string
 

@@ -4,9 +4,11 @@ import StartCompanyRequest = vinger.StartCompanyRequest;
 import {Address, LegalEntity} from "../src/shared";
 import StartCompanyVingerForm = vinger.StartCompanyVingerForm;
 import Owner = vinger.FounderAttributes;
-import BoardMemberAttributes = vinger.BoardMemberAttributes;
-import BeneficialOwner = vinger.BeneficialOwnerAttributes;
 import {EntityType} from "../src/enums";
+import FounderAttributes = vinger.FounderAttributes;
+import BeneficialOwnerAttributes = vinger.BeneficialOwnerAttributes;
+import {board} from "../src/handler_specs/board_handlers";
+import BoardMemberAttributes = board.BoardMemberAttributes;
 const chai = require('chai');
 const assert = chai.assert;
 
@@ -23,16 +25,16 @@ const entity: LegalEntity = {
   idNumber: '05118639709',
   address,
 };
-const owner: Owner = {
-  ...entity,
+const founder: FounderAttributes = {
+  idNumber: entity.idNumber,
   numberOfShares: 100,
 };
-const beneficialOwner: BeneficialOwner = {
-  ...owner,
+const beneficialOwner: BeneficialOwnerAttributes = {
+  idNumber: founder.idNumber,
   taxCountry: 'Norge',
 };
 const chair: BoardMemberAttributes = {
-  ...entity,
+  idNumber: founder.idNumber,
   role: 'Styreleder'
 };
 const vingerForm: StartCompanyVingerForm = {
@@ -72,7 +74,9 @@ const companyReq: StartCompanyRequest = {
     paymentDeadline: new Date(),
     fromDate: new Date(),
   },
-  founders: [owner],
+  foundationDate: new Date(),
+  entities: [entity],
+  founders: [founder],
   board: [chair],
   vingerForm,
   companyMission: 'Lage programmer.',
@@ -133,12 +137,12 @@ describe('Company validator', () => {
   });
 
   it ('should validate company owners', () => {
-    let compReq = { ...companyReq, owners: [owner, owner] };
+    let compReq = { ...companyReq, owners: [founder, founder] };
     // 100% of stock should be accounted for
     assert.throws(() => {
       CompanyValidator.validateFounders(compReq);
     });
-    const halfOwner: Owner = { ...owner, numberOfShares: 50 };
+    const halfOwner: Owner = { ...founder, numberOfShares: 50 };
     compReq = { ...companyReq, owners: [halfOwner] };
     assert.throws(() => {
       CompanyValidator.validateFounders(compReq);
@@ -148,12 +152,12 @@ describe('Company validator', () => {
   });
 
   it('should have a chairman on the board', () => {
-    const board: Array<vinger.BoardMemberAttributes> = [];
+    const board: BoardMemberAttributes[] = [];
     assert.throws(() => {
       CompanyValidator.validateBoard(board);
     });
     board.push({
-      ...entity,
+      idNumber: entity.idNumber,
       role: 'Styremedlem'
     });
     assert.throws(() => {

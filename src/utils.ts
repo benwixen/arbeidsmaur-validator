@@ -1,6 +1,13 @@
 import {shareholders} from "./handler_specs/shareholders_handlers";
 import {Address, LegalEntity} from "./shared";
 
+//The maximum is exclusive and the minimum is inclusive
+export function randomInt(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
 export const formatMoney = (summy: number) => {
   const sum = summy.toString();
   if (sum.length > 6) {
@@ -15,6 +22,13 @@ export const formatMoney = (summy: number) => {
   }
 };
 
+export function reviveDates(_key: string, value: any) {
+  if (typeof value === 'string' && /^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\d\d\dZ$/.test(value)) {
+    return new Date(value);
+  }
+  return value;
+}
+
 // format date to norwegian format
 export function formatDate(date: Date) {
   const day = '0' + date.getDate();
@@ -23,8 +37,14 @@ export function formatDate(date: Date) {
   return `${day.substr(-2)}.${month.substr(-2)}.${year}`;
 }
 
+// creates new date with UTC-time set to input
 export function newDate(day: number, month: number, year: number) {
   return new Date(Date.UTC(year, month - 1, day));
+}
+
+export function todaysDate(): Date {
+  let date = new Date();
+  return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
 }
 
 export function formatAddress(address: Address) {
@@ -99,8 +119,6 @@ export function shareHoldersFromTransactions(transactions: shareholders.ShareTra
     if (!buyer) {
       const owner = getByIdNumber(transaction.buyerIdNumber, owners);
       if (!owner) {
-        console.log('owners:');
-        console.log(owners);
         throw 'In conversion: couldnt find buyer with id ' + transaction.buyerIdNumber + ' in owner list.';
       }
       buyer = ownerToPublicShareholder(owner, transaction.transactionDate);

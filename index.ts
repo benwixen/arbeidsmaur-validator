@@ -1,5 +1,6 @@
 export * from './src/validation/company_validator';
 export * from './src/data/countries';
+export * from './src/data/testdata';
 export * from './src/enums';
 export * from './src/constants';
 export * from './src/errorCodes';
