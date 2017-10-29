@@ -23,6 +23,7 @@ export declare namespace shareholders {
 
   interface PublicShareHolder extends PublicEntity {
     numberOfShares: number
+    shareNumbers: string
     listedDate: Date
     lastUpdate: Date
   }
@@ -32,7 +33,7 @@ export declare namespace shareholders {
   }
 
   interface GetShareHoldersResponse extends BaseResponse {
-    shareHolders: ShareHolder[]
+    entities: LegalEntity[]
     transactions: ShareTransaction[]
   }
 
@@ -46,4 +47,13 @@ export declare namespace shareholders {
   }
 
   interface NewShareholderBookResponse extends BaseResponse {}
+
+  interface CreateShareTransactionRequest extends AuthedRequest {
+    companyId: number
+    transaction: ShareTransaction
+  }
+
+  interface CreateShareTransactionResponse extends BaseResponse {
+    transaction: ShareTransaction
+  }
 }

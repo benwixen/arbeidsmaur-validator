@@ -2,23 +2,14 @@ import {AuthedRequest, BaseResponse, LegalEntity} from "../shared";
 
 export declare namespace data {
 
-  // -
+  // If entity with idNumber exists - then update
 
-  interface CreateConnectedEntityRequest extends AuthedRequest {
+  interface SaveConnectedEntityRequest extends AuthedRequest {
     companyId: number
     legalEntity: LegalEntity
   }
 
-  interface CreateConnectedEntityResponse extends BaseResponse {}
-
-  // -
-
-  interface UpdateConnectedEntityRequest extends AuthedRequest {
-    companyId: number
-    legalEntity: LegalEntity
-  }
-
-  interface UpdateConnectedEntityResponse extends BaseResponse {}
+  interface SaveConnectedEntityResponse extends BaseResponse {}
 
   // -
 
