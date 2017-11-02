@@ -13,6 +13,15 @@ const _errorCodes = {
   noAuthToken: 'maur/no-auth-token',
   notAuthorized: 'maur/not-authorized',
 
+  // altinn
+  altinnTimeout: 'maur/altinn-timeout',
+  altinnWrongSystemId: 'maur/altinn-wrong-system-id',
+  altinnWrongSystemCredentials: 'maur/altinn-wrong-system-credentials',
+  altinnWrongUserCredentials: 'maur/altinn-wrong-user-credentials',
+  altinnUserBlocked: 'maur/altinn-user-blocked',
+  altinnNoMoreOneTimeCodes: 'maur/altinn-no-more-codes',
+  altinnWaitingForFormTask: 'maur/altinn-waiting-for-formtask',
+
   // signatures
   optimisticFailure: 'maur/optimistic-failure',
   signatureNameMismatch: 'maur/signature-name-mismatch',

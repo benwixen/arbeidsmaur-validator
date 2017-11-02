@@ -40,7 +40,7 @@ interface LegalEntity {
   idNumber: string // populated with birthdate for people in public-facing APIs
   name: string
   email: string
-  address: Address
+  address?: Address
 
   contactName?: string // for companies
   contactIdNumber?: string // for companies
@@ -68,9 +68,8 @@ export interface CompanyAttributes {
   stripeId?: string
   organizationNumber?: string
   name: string
-  contactName: string
-  contactEmail: string
-
+  contactPersonId?: number
+  contactPerson?: LegalEntity
   foundationDate: Date
   companyMission: string
   companyActivity: string
@@ -78,6 +77,7 @@ export interface CompanyAttributes {
   businessAddress: Address
   postalAddress: Address
   shares: CompanySharesAttributes
+  sharesId?: number
 
   vingerForm?: VingerFormAttributes
 }
@@ -87,4 +87,8 @@ interface CompanySharesAttributes {
   numberOfShares: number
   paymentDeadline: Date
   fromDate: Date
+  altinnUpToDate: boolean
+  lastAksjonaerRegDate?: Date
+  lastAksjonaerRegYear?: number
+  aksjonaerRegId?: number
 }

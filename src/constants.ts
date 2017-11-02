@@ -1,5 +1,7 @@
 const _constants = {
 
+  systemVersion: '1.0',
+
   boardRightToSign: {
     no: 'no',
     together: 'together',

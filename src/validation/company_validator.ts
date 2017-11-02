@@ -15,15 +15,24 @@ function throwError(message: string, description?: string) {
 export class CompanyValidator {
 
   static validateCompanyForm(companyForm: StartCompanyRequest) {
-    CompanyValidator.validateCompanyCapital(companyForm.shares.totalCapital);
-    if (!companyForm.contactName) throw new Error('Mangler navn på kontaktperson.');
-    CompanyValidator.validateEntityName(companyForm.contactName);
-    CompanyValidator.validateEmail(companyForm.contactEmail);
-    CompanyValidator.validateCompanyName(companyForm.name);
     CompanyValidator.validateLegalEntities(companyForm.entities);
+    const entityMap = new Map<string, LegalEntity>();
+    companyForm.entities.forEach(e => entityMap.set(e.idNumber, e));
+    CompanyValidator.validateCompanyCapital(companyForm.shares.totalCapital);
+    CompanyValidator.validateContactPerson(companyForm.contactPersonIdNumber, companyForm.entities);
+    if (!companyForm.contactPersonIdNumber) throw new Error('Mangler fødselsnummer til kontaktperson.');
+    CompanyValidator.validateCompanyName(companyForm.name);
     CompanyValidator.validateFounders(companyForm);
-    CompanyValidator.validateBoard((companyForm.board));
-    CompanyValidator.validateVingerForm(companyForm);
+    CompanyValidator.validateBoard(companyForm.board, companyForm.entities);
+    CompanyValidator.validateVingerForm(companyForm, entityMap);
+  }
+
+  static validateContactPerson(idNumber: string, entities: LegalEntity[]) {
+    if (!idNumber) throw new Error('Mangler fødselsnummer på kontaktperson.');
+    const index = entities.findIndex(e => e.idNumber === idNumber);
+    if (index === -1) {
+      throw new Error('Fant ikke data for kontaktperson.');
+    }
   }
 
   static validateLegalEntities(entities: LegalEntity[]) {
@@ -36,7 +45,6 @@ export class CompanyValidator {
     if (!entity.type) throw new Error('Mangler type for person/selskap.');
     CompanyValidator.validateEntityName(entity.name);
     CompanyValidator.validateEmail(entity.email);
-    CompanyValidator.validateAddress(entity.address, entity.name);
     if (!entity.idNumber) throw new Error('Mangler personnummer/org-nummer for: ' + entity.name);
     CompanyValidator.validateIdNumber(entity.idNumber, entity.name);
     if (CompanyValidator.isIdNumberCompany(entity.idNumber)) {
@@ -49,8 +57,11 @@ export class CompanyValidator {
   static validateFounders(companyForm: StartCompanyRequest) {
     if (!companyForm.founders || !companyForm.founders.length) throw new Error('Mangler eiere.');
     let totalStock = 0;
-    for (const owner of companyForm.founders) {
-      totalStock += owner.numberOfShares;
+    for (const founder of companyForm.founders) {
+      totalStock += founder.numberOfShares;
+      const entity = companyForm.entities.find(e => e.idNumber === founder.idNumber);
+      if (!entity) throw new Error('Fant ikke data for stifter: ' + founder.idNumber);
+      CompanyValidator.validateAddress(entity.address!, entity.name);
     }
     if (totalStock !== companyForm.shares.numberOfShares) {
       throw new Error('Bare ' + totalStock + ' av selskapets ' + companyForm.shares.numberOfShares + ' aksjer ' +
@@ -58,13 +69,16 @@ export class CompanyValidator {
     }
   }
 
-  static validateBoard(board: BoardMemberAttributes[]) {
+  static validateBoard(board: BoardMemberAttributes[], entities: LegalEntity[]) {
     if (!board || board.length === 0) throw new Error('Mangler styreleder i styret.');
     let foundDirector = false;
     for (const member of board) {
       if (member.role === 'Styreleder') {
         foundDirector = true;
       }
+      const entity = entities.find(e => e.idNumber === member.idNumber);
+      if (!entity) throw new Error('Fant ikke data for styremedlem: ' + member.idNumber);
+      CompanyValidator.validateAddress(entity.address!, entity.name);
     }
     if (!foundDirector) throw new Error('Mangler styreleder i styret.');
   }
@@ -78,7 +92,7 @@ export class CompanyValidator {
     return false;
   }
 
-  static validateBeneficialOwners(companyForm: StartCompanyRequest) {
+  static validateBeneficialOwners(companyForm: StartCompanyRequest, entityMap: Map<string, LegalEntity>) {
     const pct25 = companyForm.shares.numberOfShares / 4;
     for (const owner of companyForm.founders) {
       if (owner.numberOfShares >= pct25) {
@@ -87,6 +101,11 @@ export class CompanyValidator {
             + 'lagt inn som reell rettighetshaver.');
         }
       }
+    }
+    for (const beneficialOwner of companyForm.vingerForm.beneficialOwners) {
+      const entity = entityMap.get(beneficialOwner.idNumber);
+      if (!entity) throw new Error('Fant ikke data for rettighetshaver: ' + beneficialOwner.idNumber);
+      CompanyValidator.validateAddress(entity.address!, entity.name);
     }
   }
 
@@ -212,7 +231,7 @@ export class CompanyValidator {
     }
   }
 
-  static validateVingerForm(companyForm: StartCompanyRequest) {
+  static validateVingerForm(companyForm: StartCompanyRequest, entityMap: Map<string, LegalEntity>) {
     const vingerForm = companyForm.vingerForm;
 
     const boardRightToSign = vingerForm.boardRightToSign;
@@ -319,6 +338,6 @@ export class CompanyValidator {
       }
     }
 
-    CompanyValidator.validateBeneficialOwners(companyForm);
+    CompanyValidator.validateBeneficialOwners(companyForm, entityMap);
   }
 }

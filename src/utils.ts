@@ -68,7 +68,7 @@ function ownerToPublicShareholder(owner: LegalEntity, date: Date, shareNumbers: 
     type: owner.type,
     email: owner.email,
     name: owner.name,
-    address: owner.address,
+    address: owner.address!,
     idNumber: owner.idNumber,
     contactIdNumber: owner.contactIdNumber,
     contactName: owner.contactName,
@@ -167,11 +167,11 @@ export function shareHoldersFromTransactions(transactions: shareholders.ShareTra
       if (!owner) {
         throw 'In conversion: couldnt find buyer with id ' + transaction.buyerIdNumber + ' in owner list.';
       }
-      buyer = ownerToPublicShareholder(owner, transaction.transactionDate, '');
+      buyer = ownerToPublicShareholder(owner, transaction.transactionTime, '');
       shareHolders.set(transaction.buyerIdNumber, buyer);
     }
     buyer.numberOfShares += transaction.numberOfShares;
-    buyer.lastUpdate = transaction.transactionDate;
+    buyer.lastUpdate = transaction.transactionTime;
     let shares = sharesOwned.get(transaction.buyerIdNumber);
     if (!shares) shares = [];
     shares = shares.concat(parseShareNumbersString(transaction.shareNumbers));
@@ -182,7 +182,7 @@ export function shareHoldersFromTransactions(transactions: shareholders.ShareTra
         throw 'In conversion, couldnt find seller with id: ' + transaction.sellerIdNumber;
       }
       seller.numberOfShares -= transaction.numberOfShares;
-      seller.lastUpdate = transaction.transactionDate;
+      seller.lastUpdate = transaction.transactionTime;
       const sellerShares = sharesOwned.get(transaction.sellerIdNumber)!;
       const soldShares = parseShareNumbersString(transaction.shareNumbers);
       removeShares(sellerShares, soldShares);
@@ -197,7 +197,7 @@ export function shareHoldersFromTransactions(transactions: shareholders.ShareTra
 
 /* Sort transactions chronologically by transactionDate */
 export function sortTransactions(transactions: shareholders.ShareTransaction[]) {
-  transactions.sort((t1, t2) => t1.transactionDate > t2.transactionDate ? 1 : -1);
+  transactions.sort((t1, t2) => t1.transactionTime > t2.transactionTime ? 1 : -1);
 }
 
 /* Sort legal entities alphabetically by name */

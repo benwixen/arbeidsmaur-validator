@@ -1,10 +1,10 @@
-import {Address, AuthedRequest, BaseResponse, LegalEntity} from "../shared";
+import {Address, AuthedRequest, BaseResponse, CompanySharesAttributes, LegalEntity} from "../shared";
 import {vinger} from "./vinger_handlers";
 
 export declare namespace shareholders {
 
   interface ShareTransaction {
-    transactionDate: Date
+    transactionTime: Date
     numberOfShares: number
     shareNumbers: string
     buyerIdNumber: string
@@ -13,7 +13,9 @@ export declare namespace shareholders {
     sellerName?: string
   }
 
-  interface ShareHolder extends PublicShareHolder, LegalEntity {}
+  interface ShareHolder extends PublicShareHolder, LegalEntity {
+    address: Address
+  }
 
   interface PublicEntity {
     name: string
@@ -33,6 +35,10 @@ export declare namespace shareholders {
   }
 
   interface GetShareHoldersResponse extends BaseResponse {
+    currentReportingYear: number
+    aksjonaerRegReceiptId?: number
+    aksjonaerRegWorkflowId?: number
+    companyAttributes: CompanySharesAttributes
     entities: LegalEntity[]
     transactions: ShareTransaction[]
   }
@@ -41,6 +47,8 @@ export declare namespace shareholders {
   interface NewShareholderBookRequest extends AuthedRequest {
     companyId: number
     initialNumberOfShares: number
+    initialCapital: number
+    initialSharePrice: number
     entities: LegalEntity[]
     founders: vinger.FounderAttributes[]
     transactions: ShareTransaction[]

@@ -40,19 +40,19 @@ describe('utils', () => {
     const ruben = makeRuben();
     const transactions: ShareTransaction[] = [];
     transactions.push({
-      transactionDate: newDate(1, 1, 2017),
+      transactionTime: newDate(1, 1, 2017),
       numberOfShares: 90,
       shareNumbers: '1-90',
       buyerIdNumber: preben.idNumber,
     });
     transactions.push({
-      transactionDate: newDate(1, 1, 2017),
+      transactionTime: newDate(1, 1, 2017),
       numberOfShares: 10,
       shareNumbers: '91-100',
       buyerIdNumber: ruben.idNumber,
     });
     transactions.push({
-      transactionDate: newDate(15, 2, 2017),
+      transactionTime: newDate(15, 2, 2017),
       numberOfShares: 5,
       shareNumbers: '1-5',
       buyerIdNumber: preben.idNumber,
@@ -70,13 +70,13 @@ describe('utils', () => {
   it('should sort transactions by date', () => {
     const transactions: ShareTransaction[] = [];
     transactions.push({
-      transactionDate: newDate(15, 1, 2017),
+      transactionTime: newDate(15, 1, 2017),
       numberOfShares: 90,
       shareNumbers: '1-90',
       buyerIdNumber: 'fake1',
     });
     transactions.push({
-      transactionDate: newDate(1, 1, 2017),
+      transactionTime: newDate(1, 1, 2017),
       numberOfShares: 10,
       shareNumbers: '91-100',
       buyerIdNumber: 'fake2',

@@ -18,7 +18,7 @@ const address: Address = {
   zipCode: '7900',
   city: 'Rørvik',
 };
-const entity: LegalEntity = {
+const preben: LegalEntity = {
   type: EntityType.Person,
   name: 'Preben Ludviksen',
   email: 'prebenl@gmail.com',
@@ -26,7 +26,7 @@ const entity: LegalEntity = {
   address,
 };
 const founder: FounderAttributes = {
-  idNumber: entity.idNumber,
+  idNumber: preben.idNumber,
   numberOfShares: 100,
 };
 const beneficialOwner: BeneficialOwnerAttributes = {
@@ -64,8 +64,7 @@ const vingerForm: StartCompanyVingerForm = {
 const companyReq: StartCompanyRequest = {
   status: 'draft',
   name: 'Utvikler Ludviksen AS',
-  contactEmail: 'prebenl@gmail.com',
-  contactName: 'Preben Ludviksen',
+  contactPersonIdNumber: preben.idNumber,
   businessAddress: address,
   postalAddress: address,
   shares: {
@@ -73,9 +72,10 @@ const companyReq: StartCompanyRequest = {
     numberOfShares: 100,
     paymentDeadline: new Date(),
     fromDate: new Date(),
+    altinnUpToDate: false,
   },
   foundationDate: new Date(),
-  entities: [entity],
+  entities: [preben],
   founders: [founder],
   board: [chair],
   vingerForm,
@@ -154,16 +154,16 @@ describe('Company validator', () => {
   it('should have a chairman on the board', () => {
     const board: BoardMemberAttributes[] = [];
     assert.throws(() => {
-      CompanyValidator.validateBoard(board);
+      CompanyValidator.validateBoard(board, []);
     });
     board.push({
-      idNumber: entity.idNumber,
+      idNumber: preben.idNumber,
       role: 'Styremedlem'
     });
     assert.throws(() => {
-      CompanyValidator.validateBoard(board);
+      CompanyValidator.validateBoard(board, []);
     });
 
-    CompanyValidator.validateBoard(companyReq.board);
+    CompanyValidator.validateBoard(companyReq.board, companyReq.entities);
   });
 });

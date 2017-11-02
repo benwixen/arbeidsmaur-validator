@@ -59,6 +59,7 @@ export declare namespace auth {
 
   interface AuthenticateResponse extends BaseResponse {
     currentCompany?: CurrentCompany
+    mainEmail: string
     maurToken: string // JSON Web Token with permsissions, to improve authorization performance
   }
 
