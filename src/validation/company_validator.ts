@@ -70,7 +70,7 @@ export class CompanyValidator {
   }
 
   static validateBoard(board: BoardMemberAttributes[], entities: LegalEntity[]) {
-    if (!board || board.length === 0) throw new Error('Mangler styreleder i styret.');
+    if (!board || board.length === 0) throw new Error('Selskapet må ha styreleder.');
     let foundDirector = false;
     for (const member of board) {
       if (member.role === 'Styreleder') {
