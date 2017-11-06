@@ -148,13 +148,40 @@ export function parseShareNumbersString(series: string) {
   return shares;
 }
 
-export function removeShares(shareArray: number[], toRemove: number[]) {
+export function removeShares(shareArray: number[], toRemove: number[], failFast = true) {
   for (const remove of toRemove) {
     const index = shareArray.indexOf(remove);
+    if (index === -1 && !failFast) continue;
     shareArray.splice(index, 1);
   }
 }
 
+interface BlockOfShares {
+  introducedDate: Date
+  shares: number[]
+}
+
+// calculates share blocks for an owner
+// transactions: all transactions, sorted by date
+export function shareBlocksForOwner(transactions: shareholders.ShareTransaction[], ownerIdNumber: string) {
+  const shareBlocks: BlockOfShares[] = [];
+  for (const transaction of transactions) {
+    if (transaction.buyerIdNumber === ownerIdNumber) {
+      shareBlocks.push({
+        introducedDate: transaction.transactionTime,
+        shares: parseShareNumbersString(transaction.shareNumbers),
+      });
+    } else if (transaction.sellerIdNumber === ownerIdNumber) {
+      const soldShares = parseShareNumbersString(transaction.shareNumbers);
+      for (const shareBlock of shareBlocks) {
+        removeShares(shareBlock.shares, soldShares, false);
+      }
+    }
+  }
+  return shareBlocks;
+}
+
+// calculates number of shares, and shareNumbers for each owner
 // transactions is assumed to be sorted by date
 export function shareHoldersFromTransactions(transactions: shareholders.ShareTransaction[],
                                              owners: LegalEntity[]): shareholders.ShareHolder[] {

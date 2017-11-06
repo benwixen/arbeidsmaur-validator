@@ -44,9 +44,6 @@ export declare namespace vinger {
     accountantLastName?: string
     auditorIdNumber?: string
 
-    shareholdersFirstRefusal: boolean
-    shareholdersCanMortgage: boolean
-
     autoBanking: boolean
 
     bankContactName: string

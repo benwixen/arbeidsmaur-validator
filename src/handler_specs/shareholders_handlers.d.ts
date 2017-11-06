@@ -43,12 +43,16 @@ export declare namespace shareholders {
     transactions: ShareTransaction[]
   }
 
-
   interface NewShareholderBookRequest extends AuthedRequest {
     companyId: number
     initialNumberOfShares: number
     initialCapital: number
     initialSharePrice: number
+    shareholdersFirstRefusalNote?: string // if undefined, type is standard
+    shareTransactionNeedsBoardApproval: boolean
+    shareholdersCanMortgage: boolean
+    generateAksjebevis: boolean
+
     entities: LegalEntity[]
     founders: vinger.FounderAttributes[]
     transactions: ShareTransaction[]

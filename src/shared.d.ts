@@ -1,4 +1,4 @@
-import {EntityType} from "./enums";
+import {EntityType, FirstRefusalType} from "./enums";
 import {vinger} from "./handler_specs/vinger_handlers";
 import VingerFormAttributes = vinger.VingerFormAttributes;
 
@@ -87,8 +87,16 @@ interface CompanySharesAttributes {
   numberOfShares: number
   paymentDeadline: Date
   fromDate: Date
+
+  shareholdersFirstRefusal?: FirstRefusalType
+  shareholdersFirstRefusalNote?: string // if custom
+  shareTransactionNeedsBoardApproval?: boolean
+  shareholdersCanMortgage?: boolean
+
+  aksjebevisUpToDate?: boolean,
+  lastAksjebevisTime?: Date,
   altinnUpToDate: boolean
-  lastAksjonaerRegDate?: Date
+  lastAksjonaerRegTime?: Date
   lastAksjonaerRegYear?: number
   aksjonaerRegId?: number
 }
