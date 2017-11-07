@@ -68,4 +68,10 @@ export declare namespace shareholders {
   interface CreateShareTransactionResponse extends BaseResponse {
     transaction: ShareTransaction
   }
+
+  interface RenewAksjebevisRequest extends AuthedRequest {
+    companyId: number
+  }
+
+  interface RenewAksjebevisResponse extends BaseResponse {}
 }

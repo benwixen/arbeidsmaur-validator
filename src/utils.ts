@@ -1,5 +1,6 @@
 import {shareholders} from "./handler_specs/shareholders_handlers";
 import {Address, LegalEntity} from "./shared";
+import ShareTransaction = shareholders.ShareTransaction;
 
 //The maximum is exclusive and the minimum is inclusive
 export function randomInt(min: number, max: number) {
@@ -183,7 +184,7 @@ export function shareBlocksForOwner(transactions: shareholders.ShareTransaction[
 
 // calculates number of shares, and shareNumbers for each owner
 // transactions is assumed to be sorted by date
-export function shareHoldersFromTransactions(transactions: shareholders.ShareTransaction[],
+export function shareHoldersFromTransactions(transactions: ShareTransaction[],
                                              owners: LegalEntity[]): shareholders.ShareHolder[] {
   const shareHolders = new Map<string, shareholders.ShareHolder>();
   const sharesOwned = new Map<string, number[]>();
@@ -222,8 +223,23 @@ export function shareHoldersFromTransactions(transactions: shareholders.ShareTra
   return shareholderArr;
 }
 
+// transactions is assumed to be sorted by date
+export function ownersWithChanges(owners: LegalEntity[], transactions: ShareTransaction[], fromTime: Date) {
+  const entityMap = new Map<string, LegalEntity>();
+  owners.forEach(o => entityMap.set(o.idNumber, o));
+  const changedOwnerMap = new Map<string, LegalEntity>();
+  for (const transaction of transactions) {
+    if (transaction.transactionTime < fromTime) continue;
+    changedOwnerMap.set(transaction.buyerIdNumber, entityMap.get(transaction.buyerIdNumber)!);
+    if (transaction.sellerIdNumber) {
+      changedOwnerMap.set(transaction.sellerIdNumber, entityMap.get(transaction.sellerIdNumber)!);
+    }
+  }
+  return Array.from(changedOwnerMap.values());
+}
+
 /* Sort transactions chronologically by transactionDate */
-export function sortTransactions(transactions: shareholders.ShareTransaction[]) {
+export function sortTransactions(transactions: ShareTransaction[]) {
   transactions.sort((t1, t2) => t1.transactionTime > t2.transactionTime ? 1 : -1);
 }
 
