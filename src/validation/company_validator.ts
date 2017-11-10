@@ -255,11 +255,6 @@ export class CompanyValidator {
       }
     }
 
-    if (companyForm.board.length > 1) {
-      if (!vingerForm.foundationPlace) throw new Error('Mangler sted for styremøte.');
-      if (!(vingerForm.foundationTime instanceof Date)) throw new Error('Mangler tid for styremøte.');
-    }
-
     if (vingerForm.auditorIdNumber) {
       CompanyValidator.validateOrganisationNumber(vingerForm.auditorIdNumber, "Revisor");
     }

@@ -50,7 +50,7 @@ export declare namespace documents {
   }
 
   interface GetSignaturesResponse extends BaseResponse {
-    readyDocuments: SignedDocument[]
+    documents: SignedDocument[]
   }
 
   interface AddSignaturesRequest {

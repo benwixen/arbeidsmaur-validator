@@ -32,9 +32,6 @@ export declare namespace vinger {
   export interface VingerFormAttributes {
     companyId?: number
 
-    foundationPlace: string
-    foundationTime?: Date
-
     ultimateBeneficialOwners: string // json-encoded
     ceoIdNumber?: string
     ceoLastName?: string
