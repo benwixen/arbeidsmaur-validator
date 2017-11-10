@@ -36,14 +36,16 @@ export interface CompanyPaymentDetails {
 }
 
 interface LegalEntity {
+  id?: number
   type: EntityType
   idNumber: string // populated with birthdate for people in public-facing APIs
   name: string
   email: string
-  address?: Address
+  address?: Address // not needed for board members and contact person
 
   contactName?: string // for companies
   contactIdNumber?: string // for companies
+  userId?: number
 }
 
 

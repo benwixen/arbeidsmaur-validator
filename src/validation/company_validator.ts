@@ -78,7 +78,6 @@ export class CompanyValidator {
       }
       const entity = entities.find(e => e.idNumber === member.idNumber);
       if (!entity) throw new Error('Fant ikke data for styremedlem: ' + member.idNumber);
-      CompanyValidator.validateAddress(entity.address!, entity.name);
     }
     if (!foundDirector) throw new Error('Mangler styreleder i styret.');
   }

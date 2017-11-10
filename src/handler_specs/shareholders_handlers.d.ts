@@ -18,6 +18,7 @@ export declare namespace shareholders {
   }
 
   interface PublicEntity {
+    id?: number
     name: string
     address: Address
     idNumber: string // birthdate or org.number

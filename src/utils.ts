@@ -1,6 +1,9 @@
-import {shareholders} from "./handler_specs/shareholders_handlers";
 import {Address, LegalEntity} from "./shared";
-import ShareTransaction = shareholders.ShareTransaction;
+import {board} from "./handler_specs/board_handlers";
+import MeetingVoteAttributes = board.MeetingVoteAttributes;
+import {shareholders} from "./handler_specs/shareholders_handlers";
+import ShareHolder = shareholders.ShareHolder;
+import {MeetingItemType} from "./enums";
 
 //The maximum is exclusive and the minimum is inclusive
 export function randomInt(min: number, max: number) {
@@ -64,24 +67,6 @@ export function idNumberToBirthDate(idNumber: string) {
   return newDate(parseInt(day), parseInt(month), parseInt(year));
 }
 
-function ownerToPublicShareholder(owner: LegalEntity, date: Date, shareNumbers: string): shareholders.ShareHolder {
-  return {
-    type: owner.type,
-    email: owner.email,
-    name: owner.name,
-    address: owner.address!,
-    idNumber: owner.idNumber,
-    contactIdNumber: owner.contactIdNumber,
-    contactName: owner.contactName,
-    // idNumber: owner.idNumber = owner.type === EntityType.Company ?
-    //   owner.idNumber : formatDate(idNumberToBirthDate(owner.idNumber)),
-    numberOfShares: 0,
-    listedDate: date,
-    lastUpdate: date,
-    shareNumbers,
-  };
-}
-
 interface HasIdNumber {
   idNumber: string
 }
@@ -102,6 +87,7 @@ export function getIndexByIdNumber(idNumber: string, owners: HasIdNumber[]) {
 
 export function toLegalEntity(entity: LegalEntity): LegalEntity {
   return {
+    id: entity.id,
     type: entity.type,
     idNumber: entity.idNumber,
     name: entity.name,
@@ -112,138 +98,59 @@ export function toLegalEntity(entity: LegalEntity): LegalEntity {
   }
 }
 
-export function shareNumbersToString(shares: number[]) {
-  shares.sort((n1, n2) => n1 < n2 ? -1 : 1);
-  let series = '';
-  const addSeries = (from: number, to: number) => {
-    if (!series) series = (from === to) ? `${from}` : `${from}-${to}`;
-    else series = (from === to) ? `${series},${from}` : `${series},${from}-${to}`;
-  };
-  let from = shares[0];
-  let previous = shares[0];
-  for (let i = 1; i < shares.length; i++) {
-    if (shares[i] !== previous + 1) {
-      addSeries(from, previous);
-      from = shares[i];
-    }
-    previous = shares[i];
-  }
-  addSeries(from, shares[shares.length - 1]);
-  return series;
-}
-
-export function parseShareNumbersString(series: string) {
-  const shares: number[] = [];
-  const parts = series.split(',');
-  for (const part of parts) {
-    if (part.includes('-')) {
-      const from = parseInt(part.split('-')[0]);
-      const to = parseInt(part.split('-')[1]);
-      for (let i = from; i <= to; i++) {
-        shares.push(i);
-      }
-    } else {
-      shares.push(parseInt(part));
+export function countVotes(
+  votees: ShareHolder[],
+  votes: MeetingVoteAttributes[],
+  meetingChairId: number,
+  itemType: MeetingItemType,
+) {
+  const voteMap = new Map<number, boolean|undefined>();
+  votes.forEach(v => voteMap.set(v.connectedEntityId, v.vote));
+  let yesVotes = 0, noVotes = 0, totalVotes = 0;
+  for (const votee of votees) {
+    totalVotes += votee.numberOfShares;
+    const vote = voteMap.get(votee.id!);
+    if (vote) {
+      yesVotes += votee.numberOfShares;
+    } else if (vote === false) {
+      noVotes += votee.numberOfShares;
     }
   }
-  return shares;
-}
-
-export function removeShares(shareArray: number[], toRemove: number[], failFast = true) {
-  for (const remove of toRemove) {
-    const index = shareArray.indexOf(remove);
-    if (index === -1 && !failFast) continue;
-    shareArray.splice(index, 1);
+  const votesGiven = yesVotes + noVotes;
+  let votesNeeded = votesGiven / 2.0;
+  if (itemType === MeetingItemType.Statutes) {
+    votesNeeded = votesGiven * (2.0 / 3.0);
+  } else if (itemType === MeetingItemType.DividendRights) {
+    votesNeeded = votesGiven * (9.0 / 10.0);
   }
-}
-
-interface BlockOfShares {
-  introducedDate: Date
-  shares: number[]
-}
-
-// calculates share blocks for an owner
-// transactions: all transactions, sorted by date
-export function shareBlocksForOwner(transactions: shareholders.ShareTransaction[], ownerIdNumber: string) {
-  const shareBlocks: BlockOfShares[] = [];
-  for (const transaction of transactions) {
-    if (transaction.buyerIdNumber === ownerIdNumber) {
-      shareBlocks.push({
-        introducedDate: transaction.transactionTime,
-        shares: parseShareNumbersString(transaction.shareNumbers),
-      });
-    } else if (transaction.sellerIdNumber === ownerIdNumber) {
-      const soldShares = parseShareNumbersString(transaction.shareNumbers);
-      for (const shareBlock of shareBlocks) {
-        removeShares(shareBlock.shares, soldShares, false);
-      }
+  let verdict = 'Ikke vedtatt.';
+  if (yesVotes === totalVotes) {
+    verdict = 'Enstemmig vedtatt.'
+  } else if (itemType === MeetingItemType.OwnerRights) {
+    verdict = 'Ikke vedtatt, på grunn av krav om enstemmighet.'
+  } else if (yesVotes > votesNeeded) {
+    verdict = 'Vedtatt.';
+  } else if (yesVotes === votesNeeded) {
+    const leaderVote = voteMap.get(meetingChairId);
+    if (leaderVote) {
+      verdict = 'Vedtatt pga. møteleders stemme.';
     }
+  } else if (itemType === MeetingItemType.DividendRights) {
+    verdict = 'Ikke vedtatt, på grunn av krav om kvalifisert flertall.';
+  } else if (itemType === MeetingItemType.Statutes) {
+    verdict = 'Ikke vedtatt, på grunn av krav om 2/3 flerteall for vedtektsendringer.';
   }
-  return shareBlocks;
-}
-
-// calculates number of shares, and shareNumbers for each owner
-// transactions is assumed to be sorted by date
-export function shareHoldersFromTransactions(transactions: ShareTransaction[],
-                                             owners: LegalEntity[]): shareholders.ShareHolder[] {
-  const shareHolders = new Map<string, shareholders.ShareHolder>();
-  const sharesOwned = new Map<string, number[]>();
-  for (const transaction of transactions) {
-    let buyer = shareHolders.get(transaction.buyerIdNumber);
-    if (!buyer) {
-      const owner = getByIdNumber(transaction.buyerIdNumber, owners);
-      if (!owner) {
-        throw 'In conversion: couldnt find buyer with id ' + transaction.buyerIdNumber + ' in owner list.';
-      }
-      buyer = ownerToPublicShareholder(owner, transaction.transactionTime, '');
-      shareHolders.set(transaction.buyerIdNumber, buyer);
-    }
-    buyer.numberOfShares += transaction.numberOfShares;
-    buyer.lastUpdate = transaction.transactionTime;
-    let shares = sharesOwned.get(transaction.buyerIdNumber);
-    if (!shares) shares = [];
-    shares = shares.concat(parseShareNumbersString(transaction.shareNumbers));
-    sharesOwned.set(transaction.buyerIdNumber, shares);
-    if (transaction.sellerIdNumber) {
-      const seller = shareHolders.get(transaction.sellerIdNumber);
-      if (!seller) {
-        throw 'In conversion, couldnt find seller with id: ' + transaction.sellerIdNumber;
-      }
-      seller.numberOfShares -= transaction.numberOfShares;
-      seller.lastUpdate = transaction.transactionTime;
-      const sellerShares = sharesOwned.get(transaction.sellerIdNumber)!;
-      const soldShares = parseShareNumbersString(transaction.shareNumbers);
-      removeShares(sellerShares, soldShares);
-    }
+  return {
+    yesVotes,
+    noVotes,
+    votesGiven,
+    totalVotes,
+    verdict,
   }
-  let shareholderArr = Array.from(shareHolders.values());
-  shareholderArr.forEach(sh => {
-    sh.shareNumbers = shareNumbersToString(sharesOwned.get(sh.idNumber)!)
-  });
-  return shareholderArr;
-}
-
-// transactions is assumed to be sorted by date
-export function ownersWithChanges(owners: LegalEntity[], transactions: ShareTransaction[], fromTime: Date) {
-  const entityMap = new Map<string, LegalEntity>();
-  owners.forEach(o => entityMap.set(o.idNumber, o));
-  const changedOwnerMap = new Map<string, LegalEntity>();
-  for (const transaction of transactions) {
-    if (transaction.transactionTime < fromTime) continue;
-    changedOwnerMap.set(transaction.buyerIdNumber, entityMap.get(transaction.buyerIdNumber)!);
-    if (transaction.sellerIdNumber) {
-      changedOwnerMap.set(transaction.sellerIdNumber, entityMap.get(transaction.sellerIdNumber)!);
-    }
-  }
-  return Array.from(changedOwnerMap.values());
-}
-
-/* Sort transactions chronologically by transactionDate */
-export function sortTransactions(transactions: ShareTransaction[]) {
-  transactions.sort((t1, t2) => t1.transactionTime > t2.transactionTime ? 1 : -1);
 }
 
 /* Sort legal entities alphabetically by name */
 export function sortLegalEntities(owners: LegalEntity[]) {
   owners.sort((a, b) => a.name < b.name ? -1 : 1);
 }
+

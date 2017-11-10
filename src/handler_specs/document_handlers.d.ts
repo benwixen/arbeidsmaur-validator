@@ -34,6 +34,25 @@ export declare namespace documents {
     sessionId: string
   }
 
+  interface SignedDocument {
+    documentAid: string
+    signatures: Signature[]
+  }
+
+  interface Signature {
+    companyName?: string
+    b64signature: string
+    b64ocsp: string
+  }
+
+  interface GetSignaturesRequest {
+    documentAids: string[]
+  }
+
+  interface GetSignaturesResponse extends BaseResponse {
+    readyDocuments: SignedDocument[]
+  }
+
   interface AddSignaturesRequest {
     companyId: number
     signeeName: string
@@ -46,20 +65,7 @@ export declare namespace documents {
     }]
   }
 
-  interface SignedDocument {
-    documentAid: string
-    signatures: Signature[]
-  }
-
-  interface Signature {
-    companyName?: string
-    b64signature: string
-    b64ocsp: string
-  }
-
-  interface AddSignaturesResponse extends BaseResponse {
-    readyDocuments: SignedDocument[]
-  }
+  interface AddSignaturesResponse extends BaseResponse {}
 
   interface SessionStatusRequest {
     sessionId: string

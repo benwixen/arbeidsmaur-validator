@@ -5,6 +5,7 @@ export * from './src/enums';
 export * from './src/constants';
 export * from './src/errorCodes';
 export * from './src/utils';
+export * from './src/share_utils';
 export * from './src/handler_specs/auth_handlers';
 export * from './src/handler_specs/board_handlers';
 export * from './src/handler_specs/data_handlers';
