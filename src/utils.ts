@@ -99,7 +99,7 @@ export function toLegalEntity(entity: LegalEntity): LegalEntity {
 }
 
 export function countVotes(
-  votees: ShareHolder[],
+  votees: Array<ShareHolder | LegalEntity>,
   votes: MeetingVoteAttributes[],
   meetingChairId: number,
   itemType: MeetingItemType,
@@ -108,12 +108,17 @@ export function countVotes(
   votes.forEach(v => voteMap.set(v.connectedEntityId, v.vote));
   let yesVotes = 0, noVotes = 0, totalVotes = 0;
   for (const votee of votees) {
-    totalVotes += votee.numberOfShares;
+    let numVotes = 1;
+    const shareholder = votee as ShareHolder;
+    if (shareholder.numberOfShares) {
+      numVotes = shareholder.numberOfShares;
+    }
+    totalVotes += numVotes;
     const vote = voteMap.get(votee.id!);
     if (vote) {
-      yesVotes += votee.numberOfShares;
+      yesVotes += numVotes;
     } else if (vote === false) {
-      noVotes += votee.numberOfShares;
+      noVotes += numVotes;
     }
   }
   const votesGiven = yesVotes + noVotes;
@@ -130,11 +135,8 @@ export function countVotes(
     verdict = 'Ikke vedtatt, på grunn av krav om enstemmighet.'
   } else if (yesVotes > votesNeeded) {
     verdict = 'Vedtatt.';
-  } else if (yesVotes === votesNeeded) {
-    const leaderVote = voteMap.get(meetingChairId);
-    if (leaderVote) {
-      verdict = 'Vedtatt pga. møteleders stemme.';
-    }
+  } else if (yesVotes === votesNeeded && voteMap.get(meetingChairId)) {
+    verdict = 'Vedtatt pga. møteleders stemme.';
   } else if (itemType === MeetingItemType.DividendRights) {
     verdict = 'Ikke vedtatt, på grunn av krav om kvalifisert flertall.';
   } else if (itemType === MeetingItemType.Statutes) {

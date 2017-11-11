@@ -49,6 +49,14 @@ export declare namespace board {
     chairman: LegalEntity
   }
 
+  interface GetBoardRequest extends AuthedRequest {
+    companyId: number
+  }
+
+  interface GetBoardResponse extends BaseResponse {
+    board: BoardMember[]
+  }
+
   interface GetBoardAndMeetingsRequest extends AuthedRequest {
     companyId: number
   }
@@ -66,14 +74,14 @@ export declare namespace board {
 
   interface InitBoardResponse extends BaseResponse {}
 
-  interface SubmitGeneralForsamlingRequest extends AuthedRequest {
+  interface SubmitMeetingRequest extends AuthedRequest {
     companyId: number
     meeting: MeetingAttributes
     attendance: MeetingAttendanceAttributes[]
     items: MeetingItemAttributes[]
   }
 
-  interface SubmitGeneralForsamlingResponse extends BaseResponse {
+  interface SubmitMeetingResponse extends BaseResponse {
     signJobAid?: string // if current user should sign
   }
 }
