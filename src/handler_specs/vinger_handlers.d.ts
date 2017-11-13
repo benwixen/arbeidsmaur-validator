@@ -74,6 +74,8 @@ export declare namespace vinger {
     parentCompanyISIN?: string
 
     otherAgreementsExist: boolean
+
+    extraComments?: string
   }
 
   /* Request and response specs */
