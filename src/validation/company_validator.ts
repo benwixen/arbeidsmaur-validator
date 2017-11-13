@@ -6,6 +6,7 @@ import {constants} from "../constants";
 import {board} from "../handler_specs/board_handlers";
 import BoardMemberAttributes = board.BoardMemberAttributes;
 import BeneficialOwnerAttributes = vinger.BeneficialOwnerAttributes;
+import {BoardRole} from "../enums";
 
 function throwError(message: string, description?: string) {
   const desc = description ? `${description}: ` : '';
@@ -73,7 +74,7 @@ export class CompanyValidator {
     if (!board || board.length === 0) throw new Error('Selskapet må ha styreleder.');
     let foundDirector = false;
     for (const member of board) {
-      if (member.role === 'Styreleder') {
+      if (member.role === BoardRole.Chairman) {
         foundDirector = true;
       }
       const entity = entities.find(e => e.idNumber === member.idNumber);

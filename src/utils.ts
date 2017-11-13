@@ -1,9 +1,8 @@
 import {Address, LegalEntity} from "./shared";
 import {board} from "./handler_specs/board_handlers";
 import MeetingVoteAttributes = board.MeetingVoteAttributes;
-import {shareholders} from "./handler_specs/shareholders_handlers";
-import ShareHolder = shareholders.ShareHolder;
-import {MeetingItemType} from "./enums";
+import {BoardRole, MeetingItemType} from "./enums";
+import MeetingAttendanceAttributes = board.MeetingAttendanceAttributes;
 
 //The maximum is exclusive and the minimum is inclusive
 export function randomInt(min: number, max: number) {
@@ -99,7 +98,7 @@ export function toLegalEntity(entity: LegalEntity): LegalEntity {
 }
 
 export function countVotes(
-  votees: Array<ShareHolder | LegalEntity>,
+  votees: MeetingAttendanceAttributes[],
   votes: MeetingVoteAttributes[],
   meetingChairId: number,
   itemType: MeetingItemType,
@@ -108,13 +107,9 @@ export function countVotes(
   votes.forEach(v => voteMap.set(v.connectedEntityId, v.vote));
   let yesVotes = 0, noVotes = 0, totalVotes = 0;
   for (const votee of votees) {
-    let numVotes = 1;
-    const shareholder = votee as ShareHolder;
-    if (shareholder.numberOfShares) {
-      numVotes = shareholder.numberOfShares;
-    }
+    let numVotes = votee.sharesAtTime ? votee.sharesAtTime : 1;
     totalVotes += numVotes;
-    const vote = voteMap.get(votee.id!);
+    const vote = voteMap.get(votee.connectedEntityId!);
     if (vote) {
       yesVotes += numVotes;
     } else if (vote === false) {
@@ -156,3 +151,17 @@ export function sortLegalEntities(owners: LegalEntity[]) {
   owners.sort((a, b) => a.name < b.name ? -1 : 1);
 }
 
+export function boardRoleName(role: BoardRole) {
+  switch (role) {
+    case BoardRole.Chairman:
+      return 'Styreleder';
+    case BoardRole.DeputyChair:
+      return 'Nestleder';
+    case BoardRole.Member:
+      return 'Styremedlem';
+    case BoardRole.AlternateMember:
+      return 'Varamedlem';
+    default:
+      throw `Unknown board role: ${role}`
+  }
+}

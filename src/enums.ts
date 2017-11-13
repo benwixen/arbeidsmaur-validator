@@ -11,7 +11,10 @@ export enum FirstRefusalType { // forkjøpsrett
 }
 
 export enum BoardRole {
-  Styreleder = 'Styreleder',
+  Chairman = 'chairman',
+  DeputyChair = 'deputyChair',
+  Member = 'member',
+  AlternateMember = 'alternateMember',
 }
 
 export enum MeetingType {
@@ -25,4 +28,14 @@ export enum MeetingItemType { // for saker i generalforsamling
   Statutes = 'statutes',
   DividendRights = 'dividendRights',
   OwnerRights = 'ownerRights'
+}
+
+export enum MeetingRole {
+  Shareholder = 'shareholder',
+  MeetingLeader = 'meetingLEader',
+
+  Chairman = 'chairman',
+  DeputyChair = 'deputyChair',
+  Member = 'member',
+  AlternateMember = 'alternateMember',
 }

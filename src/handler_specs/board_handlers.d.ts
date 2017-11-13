@@ -1,19 +1,21 @@
 import {AuthedRequest, BaseResponse, LegalEntity} from "../shared";
-import {MeetingItemType, MeetingType} from "../enums";
+import {BoardRole, MeetingItemType, MeetingRole, MeetingType} from "../enums";
 
 export declare namespace board {
   interface BoardMemberAttributes {
     idNumber: string
-    role: string
+    role: BoardRole
   }
 
   export interface MeetingAttributes {
-    type: MeetingType,
+    alphaId?: string
+    type: MeetingType
     meetingPlace: string
     meetingTime: Date // tid for styremøte, dato for generalforsamling
     meetingChairByStatute: boolean // hvorvidt møtelederen var bestemt av vedtektene
     boardChairId: number
     meetingChairId: number
+    signedDocumentAid?: string
   }
 
   export interface SharedMeetingItemAttributes {
@@ -24,13 +26,18 @@ export declare namespace board {
   }
 
   export interface MeetingItemAttributes extends SharedMeetingItemAttributes{
-    votes: MeetingVoteAttributes[]
+    meetingVotes: MeetingVoteAttributes[]
   }
 
   export interface MeetingAttendanceAttributes {
-    participated: boolean // existence only means person was invited
-    doubleVote: boolean // styreleder or møteleder at the time
+    sharesAtTime?: number // only for annual meetings
+    roleInMeeting: MeetingRole
+    participated: boolean
     connectedEntityId: number
+  }
+
+  export interface Attendant extends LegalEntity, MeetingAttendanceAttributes {
+    signJobAid?: string // only present if meeting is not ocmpletely signed
   }
 
   export interface MeetingVoteAttributes {
@@ -57,13 +64,24 @@ export declare namespace board {
     board: BoardMember[]
   }
 
+  interface GetMeetingRequest extends AuthedRequest {
+    companyId: number
+    meetingAid: string
+  }
+
+  interface GetMeetingResponse extends BaseResponse {
+    meeting: MeetingAttributes
+    attendance: Attendant[]
+    items: MeetingItemAttributes[]
+  }
+
   interface GetBoardAndMeetingsRequest extends AuthedRequest {
     companyId: number
   }
 
   interface GetBoardAndMeetingsResponse extends BaseResponse {
     board: BoardMember[]
-    meetings: string[]
+    meetings: MeetingAttributes[]
   }
 
   interface InitBoardRequest extends AuthedRequest {

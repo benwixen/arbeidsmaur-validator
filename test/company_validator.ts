@@ -4,7 +4,7 @@ import StartCompanyRequest = vinger.StartCompanyRequest;
 import {Address, LegalEntity} from "../src/shared";
 import StartCompanyVingerForm = vinger.StartCompanyVingerForm;
 import Owner = vinger.FounderAttributes;
-import {EntityType} from "../src/enums";
+import {BoardRole, EntityType} from "../src/enums";
 import FounderAttributes = vinger.FounderAttributes;
 import BeneficialOwnerAttributes = vinger.BeneficialOwnerAttributes;
 import {board} from "../src/handler_specs/board_handlers";
@@ -35,7 +35,7 @@ const beneficialOwner: BeneficialOwnerAttributes = {
 };
 const chair: BoardMemberAttributes = {
   idNumber: founder.idNumber,
-  role: 'Styreleder'
+  role: BoardRole.Chairman,
 };
 const vingerForm: StartCompanyVingerForm = {
   autoBanking: true,
@@ -59,7 +59,6 @@ const vingerForm: StartCompanyVingerForm = {
   ultimateBeneficialOwners: '',
   boardRightToSign: 'no',
   keyPersonellRightToSign: 'boardHead',
-  foundationPlace: 'internett',
 };
 const companyReq: StartCompanyRequest = {
   status: 'draft',
@@ -158,7 +157,7 @@ describe('Company validator', () => {
     });
     board.push({
       idNumber: preben.idNumber,
-      role: 'Styremedlem'
+      role: BoardRole.Chairman
     });
     assert.throws(() => {
       CompanyValidator.validateBoard(board, []);
