@@ -32,7 +32,7 @@ export enum MeetingItemType { // for saker i generalforsamling
 
 export enum MeetingRole {
   Shareholder = 'shareholder',
-  MeetingLeader = 'meetingLEader',
+  MeetingLeader = 'meetingLeader',
 
   Chairman = 'chairman',
   DeputyChair = 'deputyChair',

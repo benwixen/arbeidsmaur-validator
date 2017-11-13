@@ -1,7 +1,4 @@
-import {
-  formatDate, formatMoney, newDate, parseShareNumbersString, shareHoldersFromTransactions, shareNumbersToString,
-  sortTransactions
-} from "../src/utils";
+import {formatDate, formatMoney, newDate} from "../src/utils";
 
 import * as chai from 'chai';
 import {shareholders} from "../src/handler_specs/shareholders_handlers";
@@ -9,6 +6,10 @@ import ShareTransaction = shareholders.ShareTransaction;
 import {test} from "../src/data/testdata";
 import makePreben = test.makePreben;
 import makeRuben = test.makeRuben;
+import {
+  parseShareNumbersString, shareHoldersFromTransactions, shareNumbersToString,
+  sortTransactions
+} from "../src/share_utils";
 const assert = chai.assert;
 
 describe('utils', () => {
