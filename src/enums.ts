@@ -11,6 +11,8 @@ export enum FirstRefusalType { // forkjøpsrett
 }
 
 export enum BoardRole {
+  CeoChair = 'ceoChairman',
+  Ceo = 'ceo',
   Chairman = 'chairman',
   DeputyChair = 'deputyChair',
   Member = 'member',

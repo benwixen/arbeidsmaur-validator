@@ -5,8 +5,8 @@ import {counties, countries} from '../data/countries';
 import {constants} from "../constants";
 import {board} from "../handler_specs/board_handlers";
 import BoardMemberAttributes = board.BoardMemberAttributes;
-import BeneficialOwnerAttributes = vinger.BeneficialOwnerAttributes;
 import {BoardRole} from "../enums";
+import FounderAttributes = vinger.FounderAttributes;
 
 function throwError(message: string, description?: string) {
   const desc = description ? `${description}: ` : '';
@@ -26,6 +26,12 @@ export class CompanyValidator {
     CompanyValidator.validateFounders(companyForm);
     CompanyValidator.validateBoard(companyForm.board, companyForm.entities);
     CompanyValidator.validateVingerForm(companyForm, entityMap);
+    const chairman = companyForm.board.find(member => member.role === BoardRole.Chairman)!;
+    const ceoIdNumber = companyForm.vingerForm.ceoIdNumber;
+    const contactIdNumber = companyForm.contactPersonIdNumber;
+    if (!(contactIdNumber === chairman.idNumber || contactIdNumber === ceoIdNumber)) {
+      throw new Error('Kontaktperson (du) må være styreleder eller daglig leder.');
+    }
   }
 
   static validateContactPerson(idNumber: string, entities: LegalEntity[]) {
@@ -83,7 +89,7 @@ export class CompanyValidator {
     if (!foundDirector) throw new Error('Mangler styreleder i styret.');
   }
 
-  private static isBeneficialOwner(idNumber: string, beneficialOwners: BeneficialOwnerAttributes[]) {
+  private static isBeneficialOwner(idNumber: string, beneficialOwners: FounderAttributes[]) {
     for (const beneficialOwner of beneficialOwners) {
       if (beneficialOwner.idNumber === idNumber) {
         return true;
@@ -184,18 +190,20 @@ export class CompanyValidator {
     return num1 == 8 || num1 == 9;
   }
 
+  static getNonAsName(companyName: string) {
+    if (companyName.startsWith('AS')) {
+      return companyName.substring(3);
+    } else if (companyName.endsWith('AS')) {
+      return companyName.substring(0, companyName.length - 3);
+    } else {
+      return companyName;
+    }
+  }
+
   static validateCompanyName(companyName: string) {
     if (!companyName) throw new Error('Mangler selskapsnavn.');
-    let nonAsName;
-    if (companyName.startsWith('AS')) {
-      nonAsName = companyName.substring(3);
-    } else if (companyName.endsWith('AS')) {
-      nonAsName = companyName.substring(0, companyName.length - 3);
-    } else {
-      nonAsName = companyName;
-    }
     const hasAsInName = companyName.startsWith('AS') || companyName.endsWith('AS');
-
+    const nonAsName = CompanyValidator.getNonAsName(companyName);
     if (nonAsName.length < 3) {
       throw new Error('Firmanavnet må være på minst tre bokstaver.');
     } else if (!hasAsInName) {

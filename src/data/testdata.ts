@@ -19,6 +19,14 @@ export namespace test {
     country: 'Norge',
   };
 
+  export const strusshamn = {
+    addressLine1: 'Svebrotet 41',
+    zipCode: '5302',
+    city: 'Strusshamn',
+    commune: 'ASKØY',
+    country: 'Norge',
+  };
+
   export const makePreben = (): LegalEntity => ({
     type: EntityType.Person,
     name: 'Preben Ludviksen',
@@ -33,6 +41,16 @@ export namespace test {
     email: `ruben${randomInt(0, 1000)}@luben.no`,
     idNumber: '03028436946',
     address: hetlevik,
+  });
+
+  export const makeLaConsulting = (): LegalEntity => ({
+    type: EntityType.Company,
+    name: 'LA Consulting AS',
+    email: `la_${randomInt(0, 1000)}@consulting.no`,
+    idNumber: '998391946',
+    address: strusshamn,
+    contactName: 'Leif Andreas Ludviksen',
+    contactIdNumber: '09076043725'
   });
 
 }

@@ -11,21 +11,18 @@ export declare namespace vinger {
   interface FounderAttributes {
     idNumber: string
     numberOfShares: number
-  }
 
-  interface Founder extends FounderAttributes, LegalEntity {}
-
-  interface BeneficialOwnerAttributes {
-    idNumber: string
-    taxCountry: string
+    // fields for beneficial owners
+    ownerShare?: number
+    taxCountry?: string
     foreignTaxId?: string
     americanTaxId?: string
   }
 
-  interface BeneficialOwner extends BeneficialOwnerAttributes, LegalEntity {}
+  interface Founder extends FounderAttributes, LegalEntity {}
 
   interface StartCompanyVingerForm extends VingerFormAttributes {
-    beneficialOwners: BeneficialOwnerAttributes[]
+    beneficialOwners: FounderAttributes[]
   }
 
   // db-compliant
@@ -49,6 +46,7 @@ export declare namespace vinger {
     bankContactEmail: string
     contactNumber: string
     contactTaxCountry: string
+    contactForeignTaxId?: string
     contactAmericanTaxId?: string
     bankLogonPreference: string
 
@@ -99,7 +97,7 @@ export declare namespace vinger {
   }
 
   interface VingerCompanyResponseForm extends vinger.StartCompanyVingerForm {
-    beneficialOwners: BeneficialOwner[]
+    beneficialOwners: Founder[]
     forwardEmail: string
   }
 
