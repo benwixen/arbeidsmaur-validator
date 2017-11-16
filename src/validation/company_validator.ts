@@ -134,7 +134,7 @@ export class CompanyValidator {
     } else if (idNumber.length === 11) {
       CompanyValidator.validatePersonNumber(idNumber, desc);
     } else {
-      throwError('Personnummer må være nøyaktig 11 siffer, og org-nummer må være nøyaktig 9 siffer.', desc);
+      throwError('ID-nummer må være 9 eller 11 siffer.', desc);
     }
   }
 
@@ -281,12 +281,6 @@ export class CompanyValidator {
         throw new Error(`Ugyldig innloggingsmetode i bank: ${vingerForm.bankLogonPreference}`);
       }
 
-      if (!vingerForm.bankContactName) throw new Error('Mangler navn på bankkontakt.');
-      CompanyValidator.validateEntityName(vingerForm.bankContactName);
-      if (!vingerForm.bankContactIdNumber) throw new Error('Mangler personnummer for bankkontakt.');
-      CompanyValidator.validatePersonNumber(vingerForm.bankContactIdNumber);
-      if (!vingerForm.bankContactEmail) throw new Error('Mangler e-post for bankkontakt.');
-      CompanyValidator.validateEmail(vingerForm.bankContactEmail);
       if (!vingerForm.bankContactAddress) throw new Error('Mangler adresse for bankkontakt.');
       if (!vingerForm.contactNumber) throw new Error('Mangler telefonnummer for bankkontakt.');
       CompanyValidator.validatePhoneNumber(vingerForm.contactNumber);

@@ -40,10 +40,7 @@ export declare namespace vinger {
 
     autoBanking: boolean
 
-    bankContactName: string
-    bankContactIdNumber: string
     bankContactAddress: Address
-    bankContactEmail: string
     contactNumber: string
     contactTaxCountry: string
     contactForeignTaxId?: string
