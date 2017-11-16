@@ -73,8 +73,7 @@ export interface CompanyAttributes {
   contactPersonId?: number
   contactPerson?: LegalEntity
   foundationDate: Date
-  companyMission: string // formål
-  companyActivity: string // aktivitet/virksomhet
+  companyMission: string // formål/aktivitet/virksomhet
 
   businessAddress: Address
   postalAddress: Address
