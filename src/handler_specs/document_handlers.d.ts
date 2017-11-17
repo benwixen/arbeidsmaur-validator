@@ -1,4 +1,5 @@
 import {AuthedRequest, BaseResponse} from "../shared";
+import {DocumentType} from "../enums";
 import {vinger} from "./vinger_handlers";
 
 export declare namespace documents {
@@ -34,7 +35,7 @@ export declare namespace documents {
     sessionId: string
   }
 
-  interface SignedDocument {
+  interface DocumentToSign {
     documentAid: string
     signatures: Signature[]
   }
@@ -50,7 +51,7 @@ export declare namespace documents {
   }
 
   interface GetSignaturesResponse extends BaseResponse {
-    documents: SignedDocument[]
+    documents: DocumentToSign[]
   }
 
   interface AddSignaturesRequest {
@@ -65,7 +66,10 @@ export declare namespace documents {
     }]
   }
 
-  interface AddSignaturesResponse extends BaseResponse {}
+  interface AddSignaturesResponse extends BaseResponse {
+    documentType: DocumentType
+    isSignerUser: boolean
+  }
 
   interface SessionStatusRequest {
     sessionId: string
@@ -73,6 +77,8 @@ export declare namespace documents {
 
   interface SessionStatusResponse extends BaseResponse {
     message: string
+    documentType: DocumentType
+    isSignerUser: boolean
   }
 
   interface EntitySignStatus {

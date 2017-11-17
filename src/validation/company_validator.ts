@@ -5,7 +5,7 @@ import {counties, countries} from '../data/countries';
 import {constants} from "../constants";
 import {board} from "../handler_specs/board_handlers";
 import BoardMemberAttributes = board.BoardMemberAttributes;
-import {BoardRole} from "../enums";
+import {BoardRole, EntityType} from "../enums";
 import FounderAttributes = vinger.FounderAttributes;
 import {getBankContact} from "../utils";
 
@@ -102,7 +102,7 @@ export class CompanyValidator {
   static validateBeneficialOwners(companyForm: StartCompanyRequest, entityMap: Map<string, LegalEntity>) {
     const pct25 = companyForm.shares.numberOfShares / 4;
     for (const owner of companyForm.founders) {
-      if (owner.numberOfShares >= pct25) {
+      if (entityMap.get(owner.idNumber)!.type === EntityType.Person && owner.numberOfShares >= pct25) {
         if (!CompanyValidator.isBeneficialOwner(owner.idNumber, companyForm.vingerForm.beneficialOwners)) {
           throw new Error(`Eier med id-nummer ${owner.idNumber} eier 25% eller mer av selskapet, men er ikke `
             + 'lagt inn som reell rettighetshaver.');
@@ -284,7 +284,7 @@ export class CompanyValidator {
 
 
       const banker = getBankContact(companyForm.board, entityMap);
-      if (!banker.address) throw new Error('Mangler adresse for bankkontakt.');
+      if (!banker.address) throw new Error(`Mangler adresse for bankkontakt (${banker.idNumber}).`);
       CompanyValidator.validateAddress(banker.address, 'Bankkontakt');
       if (!banker.phoneNumber) throw new Error('Mangler telefonnummer for bankkontakt.');
       CompanyValidator.validatePhoneNumber(banker.phoneNumber);

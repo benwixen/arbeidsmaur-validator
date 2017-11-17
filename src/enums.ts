@@ -41,3 +41,13 @@ export enum MeetingRole {
   Member = 'member',
   AlternateMember = 'alternateMember',
 }
+
+export enum DocumentType {
+  Stiftdok = 'stiftdok',
+  Styreprotokoll = 'styreprotokoll',
+  Generalprotokoll = 'generalprotokoll',
+  EkstraOrdProtokoll = 'ekstraordprotokoll',
+  Aksjebevis = 'aksjebevis',
+  Bankbekreftelse = 'bankbekreftelse',
+  SamordnetRegMelding = 'samordnetRegMeld',
+}
