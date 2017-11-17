@@ -1,6 +1,7 @@
 import {Address, AuthedRequest, BaseResponse, CompanyAttributes, LegalEntity} from '../shared';
 import {documents} from "./document_handlers";
 import {board} from "./board_handlers";
+import {altinn} from "./altinn_handlers";
 
 export declare namespace vinger {
 
@@ -176,6 +177,12 @@ export declare namespace vinger {
 
   interface GetRegMeldSignStatusResponse extends BaseResponse {
     board: EntitySignStatus[]
+    needsSignatureFromUser: boolean
   }
 
+  interface SignRegMeldRequest extends altinn.AltinnAuthedRequest {
+    companyId: number
+  }
+
+  interface SignRegMeldResponse extends BaseResponse {}
 }
