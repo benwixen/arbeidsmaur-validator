@@ -7,6 +7,7 @@ import {board} from "../handler_specs/board_handlers";
 import BoardMemberAttributes = board.BoardMemberAttributes;
 import {BoardRole} from "../enums";
 import FounderAttributes = vinger.FounderAttributes;
+import {getBankContact} from "../utils";
 
 function throwError(message: string, description?: string) {
   const desc = description ? `${description}: ` : '';
@@ -281,9 +282,12 @@ export class CompanyValidator {
         throw new Error(`Ugyldig innloggingsmetode i bank: ${vingerForm.bankLogonPreference}`);
       }
 
-      if (!vingerForm.bankContactAddress) throw new Error('Mangler adresse for bankkontakt.');
-      if (!vingerForm.contactNumber) throw new Error('Mangler telefonnummer for bankkontakt.');
-      CompanyValidator.validatePhoneNumber(vingerForm.contactNumber);
+
+      const banker = getBankContact(companyForm.board, entityMap);
+      if (!banker.address) throw new Error('Mangler adresse for bankkontakt.');
+      CompanyValidator.validateAddress(banker.address, 'Bankkontakt');
+      if (!banker.phoneNumber) throw new Error('Mangler telefonnummer for bankkontakt.');
+      CompanyValidator.validatePhoneNumber(banker.phoneNumber);
       if (!vingerForm.contactTaxCountry) throw new Error('Mangler skattemessig hjemland for bankkontakt.');
 
       if (typeof(vingerForm.expectedRevenue) !== 'number') throw new Error('Mangler forventet omsetning.');

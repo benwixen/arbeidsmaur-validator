@@ -41,6 +41,7 @@ interface LegalEntity {
   idNumber: string // populated with birthdate for people in public-facing APIs
   name: string
   email: string
+  phoneNumber?: string // only for bank contact (ceo or chair)
   address?: Address // not needed for board members and contact person
 
   contactName?: string // for companies

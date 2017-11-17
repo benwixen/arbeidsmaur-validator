@@ -1,8 +1,11 @@
 import {Address, LegalEntity} from "./shared";
 import {board} from "./handler_specs/board_handlers";
 import MeetingVoteAttributes = board.MeetingVoteAttributes;
-import {BoardRole, MeetingItemType} from "./enums";
+import {BoardRole, EntityType, MeetingItemType} from "./enums";
 import MeetingAttendanceAttributes = board.MeetingAttendanceAttributes;
+import BoardMemberAttributes = board.BoardMemberAttributes;
+import {vinger} from "./handler_specs/vinger_handlers";
+import FounderAttributes = vinger.FounderAttributes;
 
 //The maximum is exclusive and the minimum is inclusive
 export function randomInt(min: number, max: number) {
@@ -165,5 +168,35 @@ export function boardRoleName(role: BoardRole) {
       return 'Daglig leder';
     default:
       throw `Unknown board role: ${role}`
+  }
+}
+
+export function getBankContact(board: BoardMemberAttributes[], entityMap: Map<string, LegalEntity>) {
+  let banker = board.find(member => member.role === BoardRole.CeoChair);
+  if (!banker) {
+    banker = board.find(member => member.role === BoardRole.Ceo);
+    if (!banker) {
+      banker = board.find(member => member.role === BoardRole.Chairman)!;
+    }
+  }
+  return entityMap.get(banker.idNumber)!;
+}
+
+export function hasMotherCompany(founders: FounderAttributes[], entityMap: Map<string, LegalEntity>,
+  numberOfShares: number): boolean|undefined {
+
+  let companyShares = 0;
+  for (const founderProps of founders) {
+    const entity = entityMap.get(founderProps.idNumber)!;
+    if (entity.type === EntityType.Company) {
+      if (founderProps.numberOfShares / numberOfShares > 0.5) {
+        return true;
+      }
+      companyShares += founderProps.numberOfShares;
+    }
+  }
+  const companyShare = companyShares / numberOfShares;
+  if (companyShare <= 0.5) {
+    return false;
   }
 }
