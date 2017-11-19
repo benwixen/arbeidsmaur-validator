@@ -57,13 +57,6 @@ export namespace altinn {
     workflowId: number
   }
 
-  interface GetSignTextRequest extends AltinnAuthedRequest {
-    workflowId: number
-  }
-
-  interface GetSignTextResponse extends BaseResponse {
-    signText: string
-  }
 
   interface SignFormTaskRequest extends AltinnAuthedRequest {
     companyId: number

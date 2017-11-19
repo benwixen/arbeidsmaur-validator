@@ -181,8 +181,17 @@ export declare namespace vinger {
     needsSignatureFromUser: boolean
   }
 
+  interface SamRegReadyToSignRequest extends altinn.AltinnAuthedRequest {
+    companyId: number
+  }
+
+  interface SamRegReadyToSignResponse extends BaseResponse {
+    workflowId?: number
+  }
+
   interface SignRegMeldRequest extends altinn.AltinnAuthedRequest {
     companyId: number
+    workflowId: number
   }
 
   interface SignRegMeldResponse extends BaseResponse {}
