@@ -5,6 +5,7 @@ export declare namespace board {
   interface BoardMemberAttributes {
     idNumber: string
     role: BoardRole
+    isCeo?: boolean
   }
 
   export interface MeetingAttributes {

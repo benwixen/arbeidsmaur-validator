@@ -7,7 +7,6 @@ import {board} from "../handler_specs/board_handlers";
 import BoardMemberAttributes = board.BoardMemberAttributes;
 import {BoardRole, EntityType} from "../enums";
 import FounderAttributes = vinger.FounderAttributes;
-import {getBankContact} from "../utils";
 
 function throwError(message: string, description?: string) {
   const desc = description ? `${description}: ` : '';
@@ -283,7 +282,13 @@ export class CompanyValidator {
       }
 
 
-      const banker = getBankContact(companyForm.board, entityMap);
+      let banker: LegalEntity;
+      if (companyForm.ceoIdNumber) {
+        banker = entityMap.get(companyForm.ceoIdNumber)!;
+      } else {
+        const chair = companyForm.board.find(member => member.role === BoardRole.Chairman)!;
+        banker = entityMap.get(chair.idNumber)!;
+      }
       if (!banker.address) throw new Error(`Mangler adresse for bankkontakt (${banker.idNumber}).`);
       CompanyValidator.validateAddress(banker.address, 'Bankkontakt');
       if (!banker.phoneNumber) throw new Error('Mangler telefonnummer for bankkontakt.');

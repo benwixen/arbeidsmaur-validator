@@ -4,11 +4,13 @@ import StartCompanyRequest = vinger.StartCompanyRequest;
 import {Address, LegalEntity} from "../src/shared";
 import StartCompanyVingerForm = vinger.StartCompanyVingerForm;
 import Owner = vinger.FounderAttributes;
-import {BoardRole, EntityType} from "../src/enums";
+import {BoardRole} from "../src/enums";
 import FounderAttributes = vinger.FounderAttributes;
-import BeneficialOwnerAttributes = vinger.BeneficialOwnerAttributes;
 import {board} from "../src/handler_specs/board_handlers";
 import BoardMemberAttributes = board.BoardMemberAttributes;
+import {test} from "../src/data/testdata";
+import makeRuben = test.makeRuben;
+import makePreben = test.makePreben;
 const chai = require('chai');
 const assert = chai.assert;
 
@@ -19,19 +21,18 @@ const address: Address = {
   city: 'Rørvik',
 };
 const preben: LegalEntity = {
-  type: EntityType.Person,
-  name: 'Preben Ludviksen',
-  email: 'prebenl@gmail.com',
-  idNumber: '05118639709',
-  address,
+  ...makePreben(),
+  phoneNumber: '90032017',
 };
+const ruben = makeRuben();
 const founder: FounderAttributes = {
   idNumber: preben.idNumber,
   numberOfShares: 100,
 };
-const beneficialOwner: BeneficialOwnerAttributes = {
+const beneficialOwner: FounderAttributes = {
   idNumber: founder.idNumber,
   taxCountry: 'Norge',
+  numberOfShares: 0,
 };
 const chair: BoardMemberAttributes = {
   idNumber: founder.idNumber,
@@ -39,11 +40,6 @@ const chair: BoardMemberAttributes = {
 };
 const vingerForm: StartCompanyVingerForm = {
   autoBanking: true,
-  bankContactName: 'Preben Ludviksen',
-  bankContactIdNumber: '05118639709',
-  bankContactAddress: address,
-  bankContactEmail: 'prebenl@gmail.com',
-  contactNumber: '90032017',
   contactTaxCountry: 'Norge',
   bankLogonPreference: 'bankid',
   expectedRevenue: 100000,
@@ -74,12 +70,11 @@ const companyReq: StartCompanyRequest = {
     altinnUpToDate: false,
   },
   foundationDate: new Date(),
-  entities: [preben],
+  entities: [preben, ruben],
   founders: [founder],
   board: [chair],
   vingerForm,
   companyMission: 'Lage programmer.',
-  companyActivity: 'Koding'
 };
 
 describe('Company validator', () => {
@@ -136,13 +131,13 @@ describe('Company validator', () => {
   });
 
   it ('should validate company owners', () => {
-    let compReq = { ...companyReq, owners: [founder, founder] };
+    let compReq = { ...companyReq, founders: [founder, founder] };
     // 100% of stock should be accounted for
     assert.throws(() => {
       CompanyValidator.validateFounders(compReq);
     });
     const halfOwner: Owner = { ...founder, numberOfShares: 50 };
-    compReq = { ...companyReq, owners: [halfOwner] };
+    compReq = { ...companyReq, founders: [halfOwner] };
     assert.throws(() => {
       CompanyValidator.validateFounders(compReq);
     });

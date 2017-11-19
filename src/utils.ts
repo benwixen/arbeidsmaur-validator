@@ -154,7 +154,17 @@ export function sortLegalEntities(owners: LegalEntity[]) {
   owners.sort((a, b) => a.name < b.name ? -1 : 1);
 }
 
-export function boardRoleName(role: BoardRole) {
+export function boardRoleName(role?: BoardRole, isCeo?: boolean) {
+  if (isCeo) {
+    switch (role) {
+      case BoardRole.Chairman:
+        return 'Daglig leder og styreleder';
+      case BoardRole.Member:
+        return 'Daglig leder og styremedlem';
+      default:
+        return 'Daglig leder';
+    }
+  }
   switch (role) {
     case BoardRole.Chairman:
       return 'Styreleder';
@@ -164,20 +174,15 @@ export function boardRoleName(role: BoardRole) {
       return 'Styremedlem';
     case BoardRole.AlternateMember:
       return 'Varamedlem';
-    case BoardRole.Ceo:
-      return 'Daglig leder';
     default:
       throw `Unknown board role: ${role}`
   }
 }
 
 export function getBankContact(board: BoardMemberAttributes[], entityMap: Map<string, LegalEntity>) {
-  let banker = board.find(member => member.role === BoardRole.CeoChair);
+  let banker = board.find(member => member.isCeo === true);
   if (!banker) {
-    banker = board.find(member => member.role === BoardRole.Ceo);
-    if (!banker) {
-      banker = board.find(member => member.role === BoardRole.Chairman)!;
-    }
+    banker = board.find(member => member.role === BoardRole.Chairman)!;
   }
   return entityMap.get(banker.idNumber)!;
 }
@@ -198,5 +203,25 @@ export function hasMotherCompany(founders: FounderAttributes[], entityMap: Map<s
   const companyShare = companyShares / numberOfShares;
   if (companyShare <= 0.5) {
     return false;
+  }
+}
+
+export function extractCeo(board: BoardMemberAttributes[]) {
+  const newBoard = board.concat();
+  const ceoIndex = newBoard.findIndex(member => member.isCeo === true);
+  if (ceoIndex !== -1) {
+    const ceo = newBoard[ceoIndex];
+    if (!ceo.role) {
+      newBoard.splice(ceoIndex, 1);
+    }
+    return {
+      ceoIdNumber: ceo.idNumber,
+      board: newBoard,
+    }
+  } else {
+    return {
+      ceoIdNumber: undefined,
+      board: newBoard,
+    }
   }
 }

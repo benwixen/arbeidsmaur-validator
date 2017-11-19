@@ -75,6 +75,7 @@ export declare namespace vinger {
   /* Request and response specs */
 
   interface StartCompanyRequest extends CompanyAttributes {
+    ceoIdNumber?: string
     contactPersonIdNumber: string
     entities: LegalEntity[]
     founders: FounderAttributes[]

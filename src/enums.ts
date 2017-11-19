@@ -11,8 +11,6 @@ export enum FirstRefusalType { // forkjøpsrett
 }
 
 export enum BoardRole {
-  CeoChair = 'ceoChairman',
-  Ceo = 'ceo',
   Chairman = 'chairman',
   DeputyChair = 'deputyChair',
   Member = 'member',
@@ -50,4 +48,11 @@ export enum DocumentType {
   Aksjebevis = 'aksjebevis',
   Bankbekreftelse = 'bankbekreftelse',
   SamordnetRegMelding = 'samordnetRegMeld',
+}
+
+export enum CompanyRole { // for users
+  Leader = 'leader', // ceo OR board member
+  OnBoard = 'onBoard', // board member
+  Ceo = 'ceo',
+  Chairman = 'chairman'
 }
