@@ -133,6 +133,8 @@ export function countVotes(
     verdict = 'Ikke vedtatt, på grunn av krav om enstemmighet.'
   } else if (yesVotes > votesNeeded) {
     verdict = 'Vedtatt.';
+  } else if (yesVotes === votesNeeded && itemType === MeetingItemType.DividendRights) {
+    verdict = 'Vedtatt.';
   } else if (yesVotes === votesNeeded && voteMap.get(meetingChairId)) {
     verdict = 'Vedtatt pga. møteleders stemme.';
   } else if (itemType === MeetingItemType.DividendRights) {
