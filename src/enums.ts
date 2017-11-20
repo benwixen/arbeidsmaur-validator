@@ -15,6 +15,8 @@ export enum BoardRole {
   DeputyChair = 'deputyChair',
   Member = 'member',
   AlternateMember = 'alternateMember',
+
+  Ceo = 'ceo', // if not board member, but attending board meeting
 }
 
 export enum MeetingType {
@@ -38,6 +40,7 @@ export enum MeetingRole {
   DeputyChair = 'deputyChair',
   Member = 'member',
   AlternateMember = 'alternateMember',
+  Ceo = 'ceo',
 }
 
 export enum DocumentType {

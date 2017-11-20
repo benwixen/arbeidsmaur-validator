@@ -176,6 +176,8 @@ export function boardRoleName(role?: BoardRole, isCeo?: boolean) {
       return 'Styremedlem';
     case BoardRole.AlternateMember:
       return 'Varamedlem';
+    case BoardRole.Ceo:
+      return 'Daglig leder';
     default:
       throw `Unknown board role: ${role}`
   }

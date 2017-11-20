@@ -59,6 +59,7 @@ export declare namespace board {
 
   interface GetBoardRequest extends AuthedRequest {
     companyId: number
+    includeCeo?: boolean
   }
 
   interface GetBoardResponse extends BaseResponse {
