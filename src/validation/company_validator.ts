@@ -23,6 +23,9 @@ export class CompanyValidator {
     CompanyValidator.validateContactPerson(companyForm.contactPersonIdNumber, companyForm.entities);
     if (!companyForm.contactPersonIdNumber) throw new Error('Mangler fødselsnummer til kontaktperson.');
     CompanyValidator.validateCompanyName(companyForm.name);
+    if (!companyForm.businessAddress) throw new Error('Mangler forretningsadresse.');
+    CompanyValidator.validateAddress(companyForm.businessAddress, 'Forretningsadresse')
+
     CompanyValidator.validateFounders(companyForm);
     CompanyValidator.validateBoard(companyForm.board, companyForm.entities);
     CompanyValidator.validateVingerForm(companyForm, entityMap);
