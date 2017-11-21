@@ -101,5 +101,5 @@ interface CompanySharesAttributes {
   altinnUpToDate: boolean
   lastAksjonaerRegTime?: Date
   lastAksjonaerRegYear?: number
-  aksjonaerRegId?: number
+  aksjonaerRegId?: number|null
 }
