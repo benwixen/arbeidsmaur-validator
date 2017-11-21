@@ -8,6 +8,7 @@ export declare namespace shareholders {
     numberOfShares: number
     shareNumbers: string
     buyerIdNumber: string
+    pricePerShare?: number // only needed when sellerIdNumber is undefined (i.e. capital expansion)
     sellerIdNumber?: string
     buyerName?: string
     sellerName?: string
