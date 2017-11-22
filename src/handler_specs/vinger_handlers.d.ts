@@ -124,7 +124,6 @@ export declare namespace vinger {
 
   interface GetVingerSignStatusResponse extends BaseResponse {
     owners: EntitySignStatus[]
-    board: EntitySignStatus[]
   }
 
   interface GetVingerBankSignUrlRequest extends AuthedRequest{
