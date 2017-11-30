@@ -94,6 +94,7 @@ export function toLegalEntity(entity: LegalEntity): LegalEntity {
     idNumber: entity.idNumber,
     name: entity.name,
     email: entity.email,
+    phoneNumber: entity.phoneNumber,
     address: entity.address,
     contactName: entity.contactName,
     contactIdNumber: entity.contactIdNumber,
