@@ -10,16 +10,20 @@ export declare namespace documents {
     mock: boolean
   }
 
-  interface SignJob {
+  interface SignJobRequest {
     documentAid: string
     documentName: string
     signJobAid: string
+
+    // if PAdES
+    s3DocumentToSign: string // to download: original, or last signed
+    s3DocumentName: string // name to upload
   }
 
   interface InitSignSessionRequest2 {
     companyId: number
     idNumber: string
-    signJobs: SignJob[]
+    signJobs: SignJobRequest[]
     mock: boolean
     userAgent: string
   }
@@ -41,9 +45,16 @@ export declare namespace documents {
   }
 
   interface Signature {
-    companyName?: string
-    b64signature: string
-    b64ocsp: string
+    companyName?: string // if signed on behalf of company
+    signTime?: Date
+
+    // if PAdES
+    signJobAid: string
+    s3DocumentName: string
+
+    // if SDO
+    b64signature?: string
+    b64ocsp?: string
   }
 
   interface GetSignaturesRequest {
@@ -54,16 +65,23 @@ export declare namespace documents {
     documents: DocumentToSign[]
   }
 
+  interface NewDocumentSignature {
+    signTime: Date // utc sign time
+    documentAid: string
+    signJobAid: string
+
+    // if PAdES (for optimistic locking)
+    lastSignJobAid?: string
+
+    // if SDO
+    b64signature?: string
+    b64ocsp?: string
+  }
+
   interface AddSignaturesRequest {
     companyId: number
     signeeName: string
-    documents: [{
-      signTime: Date // utc sign time
-      documentAid: string
-      signJobAid: string
-      b64signature: string
-      b64ocsp: string
-    }]
+    documents: NewDocumentSignature[]
   }
 
   interface AddSignaturesResponse extends BaseResponse {
