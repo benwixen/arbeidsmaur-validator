@@ -44,8 +44,17 @@ export function formatDate(date: Date) {
 }
 
 // creates new date with UTC-time set to input
-export function newDate(day: number, month: number, year: number) {
-  return new Date(Date.UTC(year, month - 1, day));
+export function newDate(day: number, month: number, year: number, hour?: number, minute?: number) {
+  if (hour && minute) {
+    return new Date(Date.UTC(year, month - 1, day, hour, minute));
+  } else {
+    return new Date(Date.UTC(year, month - 1, day));
+  }
+}
+
+export function todaysUtcDate(): Date {
+  let date = new Date();
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
 }
 
 export function todaysDate(): Date {
