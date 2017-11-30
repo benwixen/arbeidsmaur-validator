@@ -88,6 +88,9 @@ describe('Company validator', () => {
     assert.throws(() => {
       CompanyValidator.validateCompanyName('En AS To');
     });
+    assert.throws(() => {
+      CompanyValidator.validateCompanyName('JokkmokkAS');
+    });
 
     // firmanavnet må ha tre tegn fra det norske alfabetet
     assert.throws(() => {

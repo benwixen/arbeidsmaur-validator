@@ -205,7 +205,7 @@ export class CompanyValidator {
 
   static validateCompanyName(companyName: string) {
     if (!companyName) throw new Error('Mangler selskapsnavn.');
-    const hasAsInName = companyName.startsWith('AS') || companyName.endsWith('AS');
+    const hasAsInName = companyName.startsWith('AS ') || companyName.endsWith(' AS');
     const nonAsName = CompanyValidator.getNonAsName(companyName);
     if (nonAsName.length < 3) {
       throw new Error('Firmanavnet må være på minst tre bokstaver.');
