@@ -107,6 +107,7 @@ export declare namespace vinger {
     founders: Founder[]
     vingerForm: VingerCompanyResponseForm
     board: VingerCompanyResponseBoardMember[]
+    ceo?: LegalEntity
   }
 
   interface GetVingerFormBasicStatusRequest {
