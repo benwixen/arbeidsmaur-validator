@@ -16,8 +16,10 @@ export declare namespace documents {
     signJobAid: string
 
     // if PAdES
+    signeeName: string
+    companyName?: string
     s3DocumentToSign: string // to download: original, or last signed
-    s3DocumentName: string // name to upload
+    s3DocumentUploadName: string // name to upload
   }
 
   interface InitSignSessionRequest2 {
