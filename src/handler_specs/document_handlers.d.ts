@@ -25,6 +25,7 @@ export declare namespace documents {
   interface InitSignSessionRequest2 {
     companyId: number
     idNumber: string
+    firstName: string
     signJobs: SignJobRequest[]
     mock: boolean
     userAgent: string
