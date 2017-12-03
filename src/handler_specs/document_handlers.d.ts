@@ -20,6 +20,7 @@ export declare namespace documents {
     companyName?: string
     s3DocumentToSign: string // to download: original, or last signed
     s3DocumentUploadName: string // name to upload
+    remainingSignJobsForDocument: number
   }
 
   interface InitSignSessionRequest2 {
@@ -74,7 +75,7 @@ export declare namespace documents {
     signJobAid: string
 
     // if PAdES (for optimistic locking)
-    lastSignJobAid?: string
+    remainingSignJobsForDocument: number
 
     // if SDO
     b64signature?: string
