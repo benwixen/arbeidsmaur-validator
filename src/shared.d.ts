@@ -26,15 +26,6 @@ export interface CurrentCompany {
   status: CompanyStatus
 }
 
-export interface CompanyPaymentDetails {
-  status: 'paused' | 'active' | 'cancelled',
-  cardType: string,
-  last4: string,
-  expMonth: number,
-  expYear: number,
-  nextCharge: string
-}
-
 interface LegalEntity {
   id?: number
   type: EntityType

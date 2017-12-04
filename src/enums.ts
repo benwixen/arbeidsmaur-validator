@@ -59,3 +59,13 @@ export enum CompanyRole { // for users
   Ceo = 'ceo',
   Chairman = 'chairman'
 }
+
+export enum PaymentType {
+  Invoice = 'invoice',
+  Card = 'card',
+}
+
+export enum CardStatus {
+  Paused = 'paused',
+  Active = 'active',
+}

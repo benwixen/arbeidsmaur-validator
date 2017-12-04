@@ -1,4 +1,5 @@
 import {AuthedRequest, BaseResponse, LegalEntity} from "../shared";
+import {CardStatus, PaymentType} from "../enums";
 
 export declare namespace data {
 
@@ -29,4 +30,25 @@ export declare namespace data {
   }
 
   interface DeleteConnectedEntityResponse extends BaseResponse {}
+
+  interface CompanyFullDetailsRequest extends AuthedRequest {
+    companyId: number
+  }
+
+  interface CardDetails {
+    status: CardStatus
+    cardType?: string
+    last4?: string
+    expMonth?: number
+    expYear: number
+    nextCharge: string
+  }
+
+  interface CompanyFullDetailsResponse extends BaseResponse {
+    name: string
+    paymentType: PaymentType
+    autoRenewal: boolean
+    activeUntil: Date
+    cardDetails?: CardDetails
+  }
 }
