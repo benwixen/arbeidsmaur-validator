@@ -5,6 +5,7 @@ const _errorCodes = {
   networkError: 'maur/network-error',
 
   // authentication
+  emailAlreadyInUse: 'maur/email-already-in-use',
   emailNotRegistered: 'maur/email-not-registered',
   authNotLinked: 'maur/auth-not-linked',
   userNotFound: 'maur/user-not-found',
