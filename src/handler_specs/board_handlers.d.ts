@@ -104,4 +104,12 @@ export declare namespace board {
   interface SubmitMeetingResponse extends BaseResponse {
     signJobAid?: string // if current user should sign
   }
+
+  interface GetAnnualMeetingsHeldRequest extends AuthedRequest {
+    companyId: number
+  }
+
+  interface GetAnnualMeetingsHeldResponse extends BaseResponse {
+    years: number[]
+  }
 }
