@@ -150,7 +150,7 @@ export function countVotes(
   } else if (itemType === MeetingItemType.DividendRights) {
     verdict = 'Ikke vedtatt, på grunn av krav om kvalifisert flertall.';
   } else if (itemType === MeetingItemType.Statutes) {
-    verdict = 'Ikke vedtatt, på grunn av krav om 2/3 flerteall for vedtektsendringer.';
+    verdict = 'Ikke vedtatt, på grunn av krav om 2/3 flertall for vedtektsendringer.';
   }
   return {
     yesVotes,
