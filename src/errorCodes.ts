@@ -19,6 +19,7 @@ const _errorCodes = {
   altinnWrongSystemId: 'maur/altinn-wrong-system-id',
   altinnWrongSystemCredentials: 'maur/altinn-wrong-system-credentials',
   altinnWrongUserCredentials: 'maur/altinn-wrong-user-credentials',
+  altinnWrongUser: 'maur/altinn-wrong-user',
   altinnUserBlocked: 'maur/altinn-user-blocked',
   altinnNoMoreOneTimeCodes: 'maur/altinn-no-more-codes',
   altinnWaitingForFormTask: 'maur/altinn-waiting-for-formtask',
