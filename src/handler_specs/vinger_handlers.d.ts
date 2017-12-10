@@ -108,15 +108,7 @@ export declare namespace vinger {
     vingerForm: VingerCompanyResponseForm
     board: VingerCompanyResponseBoardMember[]
     ceo?: LegalEntity
-  }
-
-  interface GetVingerFormBasicStatusRequest {
-    stiftelsesDokAid: string
-  }
-
-  interface GetVingerFormBasicStatusResponse {
-    remainingSignatures: boolean
-    autoBanking: boolean
+    stiftDokAid?: string
   }
 
   interface GetVingerSignStatusRequest extends AuthedRequest {
