@@ -178,7 +178,8 @@ export declare namespace vinger {
   }
 
   interface SamRegReadyToSignResponse extends BaseResponse {
-    workflowId?: number
+    workflowId?: number // undefined if not yet ready
+    previewUrl?: string
   }
 
   interface SignRegMeldRequest extends altinn.AltinnAuthedRequest {

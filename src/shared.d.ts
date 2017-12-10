@@ -23,6 +23,7 @@ export interface AuthedRequest {
 export interface CurrentCompany {
   id: number
   name: string
+  orgNumber?: string
   status: CompanyStatus
 }
 
