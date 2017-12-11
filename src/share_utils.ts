@@ -23,6 +23,7 @@ function ownerToPublicShareholder(owner: LegalEntity, date: Date, shareNumbers: 
 }
 
 export function shareNumbersToString(shares: number[]) {
+  if (shares.length === 0) return undefined;
   shares.sort((n1, n2) => n1 < n2 ? -1 : 1);
   let series = '';
   const addSeries = (from: number, to: number) => {
@@ -49,6 +50,9 @@ export function parseShareNumbersString(series: string) {
     if (part.includes('-')) {
       const from = parseInt(part.split('-')[0]);
       const to = parseInt(part.split('-')[1]);
+      if (to < from) {
+        throw new Error('Invalid shareNumbers string: ' + part);
+      }
       for (let i = from; i <= to; i++) {
         shares.push(i);
       }
@@ -63,6 +67,8 @@ export function removeShares(shareArray: number[], toRemove: number[], failFast 
   for (const remove of toRemove) {
     const index = shareArray.indexOf(remove);
     if (index === -1 && !failFast) continue;
+    if (index === -1 && failFast) throw new Error(
+      'Tried to remove share ' + remove + ' from array ' + JSON.stringify(shareArray));
     shareArray.splice(index, 1);
   }
 }
@@ -120,7 +126,7 @@ export function shareHoldersFromTransactions(transactions: ShareTransaction[],
       seller.lastUpdate = transaction.transactionTime;
       const sellerShares = sharesOwned.get(transaction.sellerIdNumber)!;
       const soldShares = parseShareNumbersString(transaction.shareNumbers);
-      removeShares(sellerShares, soldShares);
+      removeShares(sellerShares, soldShares, true);
     }
   }
   let shareholderArr = Array.from(shareHolders.values());

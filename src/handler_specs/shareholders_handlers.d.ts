@@ -27,7 +27,7 @@ export declare namespace shareholders {
 
   interface PublicShareHolder extends PublicEntity {
     numberOfShares: number
-    shareNumbers: string
+    shareNumbers?: string
     listedDate: Date
     lastUpdate: Date
   }
