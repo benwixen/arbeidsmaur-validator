@@ -44,11 +44,17 @@ export declare namespace data {
     nextCharge: string
   }
 
+  interface UserAccountDescription {
+    name: string
+    role: string
+  }
+
   interface CompanyFullDetailsResponse extends BaseResponse {
     name: string
     paymentType: PaymentType
     autoRenewal: boolean
     activeUntil: Date
     cardDetails?: CardDetails
+    userAccounts: UserAccountDescription[]
   }
 }
