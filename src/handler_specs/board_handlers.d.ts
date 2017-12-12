@@ -47,7 +47,10 @@ export declare namespace board {
     connectedEntityId: number
   }
 
-  interface BoardMember extends BoardMemberAttributes, LegalEntity {}
+  interface BoardMember extends BoardMemberAttributes, LegalEntity {
+    fromDate?: Date
+    toDate?: Date
+  }
 
   interface GetChairmanRequest extends AuthedRequest {
     companyId: number
@@ -59,6 +62,7 @@ export declare namespace board {
 
   interface GetBoardRequest extends AuthedRequest {
     companyId: number
+    includeHistory?: boolean // if yes, all former board positions are also returned
     includeCeo?: boolean
   }
 
