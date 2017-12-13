@@ -81,15 +81,16 @@ export class CompanyValidator {
 
   public static validateBoard(boardMembers: BoardMemberAttributes[], entities: LegalEntity[]) {
     if (!boardMembers || boardMembers.length === 0) throw new Error('Selskapet må ha styreleder.');
-    let foundDirector = false;
+    let numberOfChairs = 0;
     for (const member of boardMembers) {
       if (member.role === BoardRole.Chairman) {
-        foundDirector = true;
+        numberOfChairs += 1;
       }
       const entity = entities.find(e => e.idNumber === member.idNumber);
       if (!entity) throw new Error('Fant ikke data for styremedlem: ' + member.idNumber);
     }
-    if (!foundDirector) throw new Error('Mangler styreleder i styret.');
+    if (numberOfChairs === 0) throw new Error('Mangler styreleder i styret.');
+    else if (numberOfChairs > 1) throw new Error('Du kan ikke ha flere enn én styreleder.');
   }
 
   private static isBeneficialOwner(idNumber: string, beneficialOwners: FounderAttributes[]) {
