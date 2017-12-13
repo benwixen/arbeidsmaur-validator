@@ -60,19 +60,19 @@ export interface CompanyAttributes {
   id?: number
   status: CompanyStatus
   stripeId?: string
-  organizationNumber?: string
+  organizationNumber?: string // unknown for companies in Vinger-process
   name: string
   contactPersonId?: number
   contactPerson?: LegalEntity
   ceoId?: number,
   foundationDate: Date
-  companyMission: string // formål/aktivitet/virksomhet
-
   businessAddress: Address
   postalAddress: Address
-  shares: CompanySharesAttributes
-  sharesId?: number
 
+  /* unknown for freshly joined Dronning-companies */
+  shares?: CompanySharesAttributes
+  sharesId?: number
+  companyMission?: string //// formål/aktivitet/virksomhet
   vingerForm?: VingerFormAttributes
 }
 

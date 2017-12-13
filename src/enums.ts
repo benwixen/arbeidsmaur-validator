@@ -65,7 +65,16 @@ export enum PaymentType {
   Card = 'card',
 }
 
+export enum PaymentTerm {
+  Yearly = 'yearly',
+  Monthly = 'monthly',
+}
+
 export enum CardStatus {
   Paused = 'paused',
   Active = 'active',
+}
+
+export enum OrganizationForm {
+  Aksjeselskap = 'AS',
 }

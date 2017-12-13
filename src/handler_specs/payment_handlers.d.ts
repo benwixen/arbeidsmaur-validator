@@ -1,16 +1,23 @@
-import {BaseResponse} from '../shared';
+import {OrganizationForm} from '../enums';
+import {Address, BaseResponse} from '../shared';
 
 export declare namespace payment {
 
-  interface PayRequest {
-    stripeToken: string
+  interface OrderDronningRequest {
     email: string
-    customerName: string
+    contactName: string
+    contactIdNumber: string
     companyName: string
     organizationNumber: string
+    foundationDate: Date
+    businessAddress: Address
+    postalAddress?: Address
+    organizationForm: OrganizationForm,
+    numberOfEmployees: number
+    isVatRegistered: boolean
   }
 
-  interface PayResponse extends BaseResponse {}
+  interface OrderDronningResponse extends BaseResponse {}
 
   interface ReplaceCardRequest {
     firebaseToken: string
