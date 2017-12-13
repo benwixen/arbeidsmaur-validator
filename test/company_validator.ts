@@ -1,17 +1,17 @@
-import {CompanyValidator} from "../src/validation/company_validator";
-import {vinger} from "../src/handler_specs/vinger_handlers";
-import StartCompanyRequest = vinger.StartCompanyRequest;
-import {Address, LegalEntity} from "../src/shared";
+import BoardMemberAttributes = board.BoardMemberAttributes;
+import {test} from '../src/data/testdata';
 import StartCompanyVingerForm = vinger.StartCompanyVingerForm;
 import Owner = vinger.FounderAttributes;
-import {BoardRole} from "../src/enums";
+import {BoardRole} from '../src/enums';
 import FounderAttributes = vinger.FounderAttributes;
-import {board} from "../src/handler_specs/board_handlers";
-import BoardMemberAttributes = board.BoardMemberAttributes;
-import {test} from "../src/data/testdata";
-import makeRuben = test.makeRuben;
-import makePreben = test.makePreben;
-const chai = require('chai');
+import {board} from '../src/handler_specs/board_handlers';
+import {vinger} from '../src/handler_specs/vinger_handlers';
+import StartCompanyRequest = vinger.StartCompanyRequest;
+import {Address, LegalEntity} from '../src/shared';
+import {CompanyValidator} from '../src/validation/company_validator';
+const makeRuben = test.makeRuben;
+const makePreben = test.makePreben;
+import chai = require('chai');
 const assert = chai.assert;
 
 const address: Address = {
@@ -116,7 +116,6 @@ describe('Company validator', () => {
     CompanyValidator.validateCompanyName('Oslo Møbler AS');
   });
 
-
   it('capital needs to be 30.000 or more', () => {
     assert.throws(() => {
       CompanyValidator.validateCompanyCapital(0);
@@ -127,7 +126,6 @@ describe('Company validator', () => {
     CompanyValidator.validateCompanyCapital(30000);
     CompanyValidator.validateCompanyCapital(1000000);
   });
-
 
   it('should validate company form', () => {
     CompanyValidator.validateCompanyForm(companyReq);
@@ -149,16 +147,16 @@ describe('Company validator', () => {
   });
 
   it('should have a chairman on the board', () => {
-    const board: BoardMemberAttributes[] = [];
+    const boardMembers: BoardMemberAttributes[] = [];
     assert.throws(() => {
-      CompanyValidator.validateBoard(board, []);
+      CompanyValidator.validateBoard(boardMembers, []);
     });
-    board.push({
+    boardMembers.push({
       idNumber: preben.idNumber,
-      role: BoardRole.Chairman
+      role: BoardRole.Chairman,
     });
     assert.throws(() => {
-      CompanyValidator.validateBoard(board, []);
+      CompanyValidator.validateBoard(boardMembers, []);
     });
 
     CompanyValidator.validateBoard(companyReq.board, companyReq.entities);

@@ -1,13 +1,13 @@
-import {Address, LegalEntity} from "./shared";
-import {board} from "./handler_specs/board_handlers";
 import MeetingVoteAttributes = board.MeetingVoteAttributes;
-import {BoardRole, EntityType, MeetingItemType} from "./enums";
+import {BoardRole, EntityType, MeetingItemType} from './enums';
+import {board} from './handler_specs/board_handlers';
 import MeetingAttendanceAttributes = board.MeetingAttendanceAttributes;
 import BoardMemberAttributes = board.BoardMemberAttributes;
-import {vinger} from "./handler_specs/vinger_handlers";
+import {vinger} from './handler_specs/vinger_handlers';
+import {Address, LegalEntity} from './shared';
 import FounderAttributes = vinger.FounderAttributes;
 
-//The maximum is exclusive and the minimum is inclusive
+// The maximum is exclusive and the minimum is inclusive
 export function randomInt(min: number, max: number) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -53,12 +53,12 @@ export function newDate(day: number, month: number, year: number, hour?: number,
 }
 
 export function todaysUtcDate(): Date {
-  let date = new Date();
+  const date = new Date();
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
 }
 
 export function todaysDate(): Date {
-  let date = new Date();
+  const date = new Date();
   return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
 }
 
@@ -89,7 +89,7 @@ export function getByIdNumber<T extends HasIdNumber>(idNumber: string, owners: T
 }
 
 export function getIndexByIdNumber(idNumber: string, owners: HasIdNumber[]) {
-  for (let i = 0 ; i< owners.length; i++) {
+  for (let i = 0 ; i < owners.length; i++) {
     const owner = owners[i];
     if (owner.idNumber === idNumber) return i;
   }
@@ -107,7 +107,7 @@ export function toLegalEntity(entity: LegalEntity): LegalEntity {
     address: entity.address,
     contactName: entity.contactName,
     contactIdNumber: entity.contactIdNumber,
-  }
+  };
 }
 
 export function countVotes(
@@ -120,7 +120,7 @@ export function countVotes(
   votes.forEach(v => voteMap.set(v.connectedEntityId, v.vote));
   let yesVotes = 0, noVotes = 0, totalVotes = 0;
   for (const votee of votees) {
-    let numVotes = votee.sharesAtTime ? votee.sharesAtTime : 1;
+    const numVotes = votee.sharesAtTime ? votee.sharesAtTime : 1;
     totalVotes += numVotes;
     const vote = voteMap.get(votee.connectedEntityId!);
     if (vote) {
@@ -138,9 +138,9 @@ export function countVotes(
   }
   let verdict = 'Ikke vedtatt.';
   if (yesVotes === totalVotes) {
-    verdict = 'Enstemmig vedtatt.'
+    verdict = 'Enstemmig vedtatt.';
   } else if (itemType === MeetingItemType.OwnerRights) {
-    verdict = 'Ikke vedtatt, på grunn av krav om enstemmighet.'
+    verdict = 'Ikke vedtatt, på grunn av krav om enstemmighet.';
   } else if (yesVotes > votesNeeded) {
     verdict = 'Vedtatt.';
   } else if (yesVotes === votesNeeded && itemType === MeetingItemType.DividendRights) {
@@ -158,7 +158,7 @@ export function countVotes(
     votesGiven,
     totalVotes,
     verdict,
-  }
+  };
 }
 
 /* Sort legal entities alphabetically by name */
@@ -189,14 +189,14 @@ export function boardRoleName(role?: BoardRole, isCeo?: boolean) {
     case BoardRole.Ceo:
       return 'Daglig leder';
     default:
-      throw `Unknown board role: ${role}`
+      throw new Error(`Unknown board role: ${role}`);
   }
 }
 
-export function getBankContact(board: BoardMemberAttributes[], entityMap: Map<string, LegalEntity>) {
-  let banker = board.find(member => member.isCeo === true);
+export function getBankContact(boardMembers: BoardMemberAttributes[], entityMap: Map<string, LegalEntity>) {
+  let banker = boardMembers.find(member => member.isCeo === true);
   if (!banker) {
-    banker = board.find(member => member.role === BoardRole.Chairman)!;
+    banker = boardMembers.find(member => member.role === BoardRole.Chairman)!;
   }
   return entityMap.get(banker.idNumber)!;
 }
@@ -220,8 +220,8 @@ export function hasMotherCompany(founders: FounderAttributes[], entityMap: Map<s
   }
 }
 
-export function extractCeo(board: BoardMemberAttributes[]) {
-  const newBoard = board.concat();
+export function extractCeo(boardMembers: BoardMemberAttributes[]) {
+  const newBoard = boardMembers.concat();
   const ceoIndex = newBoard.findIndex(member => member.isCeo === true);
   if (ceoIndex !== -1) {
     const ceo = newBoard[ceoIndex];
@@ -231,11 +231,11 @@ export function extractCeo(board: BoardMemberAttributes[]) {
     return {
       ceoIdNumber: ceo.idNumber,
       board: newBoard,
-    }
+    };
   } else {
     return {
       ceoIdNumber: undefined,
       board: newBoard,
-    }
+    };
   }
 }

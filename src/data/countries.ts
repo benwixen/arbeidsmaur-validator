@@ -1,4 +1,4 @@
-const _countries = [
+export const countries = [
   'Afghanistan', 'Albania', 'Algerie', 'Amerikansk Samoa', 'Andorra', 'Angola', 'Anguilla',
   'Antigua og Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Aserbajdsjan', 'Australia', 'Bahamas', 'Bahrain',
   'Bangladesh', 'Barbados', 'Belgia', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia-Hercegovina',
@@ -27,15 +27,11 @@ const _countries = [
   'Sør-Afrika', 'Sør-Korea', 'Sør-Sudan', 'Tadsjikistan', 'Taiwan', 'Tanzania', 'Thailand', 'Togo', 'Tonga',
   'Trinidad og Tobago', 'Tsjad', 'Tsjekkia', 'Tunisia', 'Turkmenistan', 'Tuvalu', 'Tyrkia', 'Tyskland',
   'Uganda', 'Ukraina', 'Ungarn', 'Uruguay', 'USA', 'Usbekistan', 'Vanuatu', 'Vatikanstaten', 'Venezuela',
-  'Vest-Sahara', 'Vietnam', 'Zambia', 'Zimbabwe', 'Øst-Timor', 'Østerrike'
+  'Vest-Sahara', 'Vietnam', 'Zambia', 'Zimbabwe', 'Øst-Timor', 'Østerrike',
 ];
 
-export const countries = _countries;
-
-const _counties = [
+export const counties = [
   'Akershus', 'Aust-Agder', 'Buskerud', 'Finnmark', 'Hedmark', 'Hordaland', 'Møre og Romsdal',
   'Nord-Trøndelag', 'Nordland', 'Oppland', 'Oslo', 'Rogaland', 'Sogn og Fjordane', 'Sør-Trøndelag',
-  'Telemark', 'Troms', 'Vest-Agder', 'Vestfold', 'Østfold'
+  'Telemark', 'Troms', 'Vest-Agder', 'Vestfold', 'Østfold',
 ];
-
-export const counties = _counties;

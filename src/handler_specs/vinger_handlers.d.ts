@@ -1,7 +1,7 @@
-import {Address, AuthedRequest, BaseResponse, CompanyAttributes, LegalEntity} from '../shared';
-import {documents} from "./document_handlers";
-import {board} from "./board_handlers";
-import {altinn} from "./altinn_handlers";
+import {AuthedRequest, BaseResponse, CompanyAttributes, LegalEntity} from '../shared';
+import {altinn} from './altinn_handlers';
+import {board} from './board_handlers';
+import {documents} from './document_handlers';
 
 export declare namespace vinger {
 
@@ -119,11 +119,11 @@ export declare namespace vinger {
     owners: EntitySignStatus[]
   }
 
-  interface GetVingerBankSignUrlRequest extends AuthedRequest{
+  interface GetVingerBankSignUrlRequest extends AuthedRequest {
     companyId: number
   }
 
-  interface GetVingerBankSignUrlResponse extends BaseResponse{
+  interface GetVingerBankSignUrlResponse extends BaseResponse {
     signUrl: string
   }
 

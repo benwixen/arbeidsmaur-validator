@@ -10,8 +10,8 @@ export declare namespace payment {
     organizationNumber: string
   }
 
-  interface PayResponse extends BaseResponse {}  
-  
+  interface PayResponse extends BaseResponse {}
+
   interface ReplaceCardRequest {
     firebaseToken: string
     stripeToken: string
@@ -20,7 +20,7 @@ export declare namespace payment {
   interface ReplaceCardResponse extends BaseResponse {}
 
   interface CancelSubscriptionRequest {
-    firebaseToken: string 
+    firebaseToken: string
     companyId: number
   }
 
@@ -41,4 +41,3 @@ export declare namespace payment {
 
   interface RestartSubscriptionResponse extends BaseResponse {}
 }
-

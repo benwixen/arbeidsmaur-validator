@@ -1,5 +1,5 @@
-import {Address, AuthedRequest, BaseResponse, CompanySharesAttributes, LegalEntity} from "../shared";
-import {vinger} from "./vinger_handlers";
+import {Address, AuthedRequest, BaseResponse, CompanySharesAttributes, LegalEntity} from '../shared';
+import {vinger} from './vinger_handlers';
 
 export declare namespace shareholders {
 

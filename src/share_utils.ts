@@ -1,7 +1,7 @@
-import {LegalEntity} from "./shared";
-import {shareholders} from "./handler_specs/shareholders_handlers";
+import {shareholders} from './handler_specs/shareholders_handlers';
+import {LegalEntity} from './shared';
 import ShareTransaction = shareholders.ShareTransaction;
-import {getByIdNumber} from "./utils";
+import {getByIdNumber} from './utils';
 
 function ownerToPublicShareholder(owner: LegalEntity, date: Date, shareNumbers: string): shareholders.ShareHolder {
   return {
@@ -26,9 +26,9 @@ export function shareNumbersToString(shares: number[]) {
   if (shares.length === 0) return undefined;
   shares.sort((n1, n2) => n1 < n2 ? -1 : 1);
   let series = '';
-  const addSeries = (from: number, to: number) => {
-    if (!series) series = (from === to) ? `${from}` : `${from}-${to}`;
-    else series = (from === to) ? `${series},${from}` : `${series},${from}-${to}`;
+  const addSeries = (fromShare: number, toShare: number) => {
+    if (!series) series = (fromShare === toShare) ? `${fromShare}` : `${fromShare}-${toShare}`;
+    else series = (fromShare === toShare) ? `${series},${fromShare}` : `${series},${fromShare}-${toShare}`;
   };
   let from = shares[0];
   let previous = shares[0];
@@ -67,8 +67,9 @@ export function removeShares(shareArray: number[], toRemove: number[], failFast 
   for (const remove of toRemove) {
     const index = shareArray.indexOf(remove);
     if (index === -1 && !failFast) continue;
-    if (index === -1 && failFast) throw new Error(
-      'Tried to remove share ' + remove + ' from array ' + JSON.stringify(shareArray));
+    if (index === -1 && failFast) {
+      throw new Error(`Tried to remove share ${remove} from array ${JSON.stringify(shareArray)}`);
+    }
     shareArray.splice(index, 1);
   }
 }
@@ -101,27 +102,28 @@ export function shareBlocksForOwner(transactions: shareholders.ShareTransaction[
 // calculates number of shares, and shareNumbers for each owner
 // transactions is assumed to be sorted by date
 export function shareHoldersFromTransactions(transactions: ShareTransaction[],
-    owners: LegalEntity[], atTime?: Date): shareholders.ShareHolder[] {
+                                             owners: LegalEntity[], atTime?: Date): shareholders.ShareHolder[] {
   const shareHolders = new Map<string, shareholders.ShareHolder>();
   const sharesOwned = new Map<string, number[]>();
   for (const transaction of transactions) {
     if (atTime && transaction.transactionTime > atTime) break;
-    let buyer = shareHolders.get(transaction.buyerIdNumber);
+    const buyerIdNumber = transaction.buyerIdNumber;
+    let buyer = shareHolders.get(buyerIdNumber);
     if (!buyer) {
-      const owner = getByIdNumber(transaction.buyerIdNumber, owners);
-      if (!owner) throw 'In conversion: couldnt find buyer with id ' + transaction.buyerIdNumber + ' in owner list.';
+      const owner = getByIdNumber(buyerIdNumber, owners);
+      if (!owner) throw new Error('In conversion: couldnt find buyer with id ' + buyerIdNumber + ' in owner list.');
       buyer = ownerToPublicShareholder(owner, transaction.transactionTime, '');
-      shareHolders.set(transaction.buyerIdNumber, buyer);
+      shareHolders.set(buyerIdNumber, buyer);
     }
     buyer.numberOfShares += transaction.numberOfShares;
     buyer.lastUpdate = transaction.transactionTime;
-    let shares = sharesOwned.get(transaction.buyerIdNumber);
+    let shares = sharesOwned.get(buyerIdNumber);
     if (!shares) shares = [];
     shares = shares.concat(parseShareNumbersString(transaction.shareNumbers));
-    sharesOwned.set(transaction.buyerIdNumber, shares);
+    sharesOwned.set(buyerIdNumber, shares);
     if (transaction.sellerIdNumber) {
       const seller = shareHolders.get(transaction.sellerIdNumber);
-      if (!seller) throw 'In conversion, couldnt find seller with id: ' + transaction.sellerIdNumber;
+      if (!seller) throw new Error('In conversion, couldnt find seller with id: ' + transaction.sellerIdNumber);
       seller.numberOfShares -= transaction.numberOfShares;
       seller.lastUpdate = transaction.transactionTime;
       const sellerShares = sharesOwned.get(transaction.sellerIdNumber)!;
@@ -129,7 +131,7 @@ export function shareHoldersFromTransactions(transactions: ShareTransaction[],
       removeShares(sellerShares, soldShares, true);
     }
   }
-  let shareholderArr = Array.from(shareHolders.values());
+  const shareholderArr = Array.from(shareHolders.values());
   shareholderArr.forEach(sh => sh.shareNumbers = shareNumbersToString(sharesOwned.get(sh.idNumber)!));
   return shareholderArr;
 }

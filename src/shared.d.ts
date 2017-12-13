@@ -1,5 +1,5 @@
-import {EntityType, FirstRefusalType} from "./enums";
-import {vinger} from "./handler_specs/vinger_handlers";
+import {EntityType, FirstRefusalType} from './enums';
+import {vinger} from './handler_specs/vinger_handlers';
 import VingerFormAttributes = vinger.VingerFormAttributes;
 
 export interface ServerError {
@@ -41,14 +41,13 @@ interface LegalEntity {
   userId?: number
 }
 
-
 export interface PostalAddress {
   zipCode: string
   city: string
   commune?: string
 }
 
-export interface Address extends PostalAddress{
+export interface Address extends PostalAddress {
   addressLine1: string
   country: string
 }

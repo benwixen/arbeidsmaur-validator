@@ -1,4 +1,4 @@
-import {BaseResponse, CurrentCompany, PostalAddress, AuthedRequest} from '../shared';
+import {AuthedRequest, BaseResponse, CurrentCompany, PostalAddress} from '../shared';
 
 export declare namespace auth {
   interface ActivationCodeToEmailRequest {

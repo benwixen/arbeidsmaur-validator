@@ -1,4 +1,4 @@
-import {AuthedRequest, BaseResponse} from "../shared";
+import {AuthedRequest, BaseResponse} from '../shared';
 
 export namespace altinn {
 
@@ -34,7 +34,6 @@ export namespace altinn {
     altinnToken: string
   }
 
-
   interface AltinnAuthedRequest extends AuthedRequest {
     altinnToken: string
   }
@@ -57,12 +56,10 @@ export namespace altinn {
     workflowId: number
   }
 
-
   interface SignFormTaskRequest extends AltinnAuthedRequest {
     companyId: number
     workflowId: number
   }
 
-  interface SignFormTaskRespone extends BaseResponse {
-  }
+  interface SignFormTaskRespone extends BaseResponse {}
 }

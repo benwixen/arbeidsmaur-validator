@@ -1,21 +1,21 @@
-import {vinger} from "../handler_specs/vinger_handlers";
-import StartCompanyRequest = vinger.StartCompanyRequest;
-import {Address, LegalEntity} from "../shared";
+import {constants} from '../constants';
 import {counties, countries} from '../data/countries';
-import {constants} from "../constants";
-import {board} from "../handler_specs/board_handlers";
 import BoardMemberAttributes = board.BoardMemberAttributes;
-import {BoardRole, EntityType} from "../enums";
+import {BoardRole, EntityType} from '../enums';
+import {board} from '../handler_specs/board_handlers';
+import {vinger} from '../handler_specs/vinger_handlers';
+import StartCompanyRequest = vinger.StartCompanyRequest;
+import {Address, LegalEntity} from '../shared';
 import FounderAttributes = vinger.FounderAttributes;
 
 function throwError(message: string, description?: string) {
   const desc = description ? `${description}: ` : '';
-  throw new Error(`${desc}${message}`)
+  throw new Error(`${desc}${message}`);
 }
 
 export class CompanyValidator {
 
-  static validateCompanyForm(companyForm: StartCompanyRequest) {
+  public static validateCompanyForm(companyForm: StartCompanyRequest) {
     CompanyValidator.validateLegalEntities(companyForm.entities);
     const entityMap = new Map<string, LegalEntity>();
     companyForm.entities.forEach(e => entityMap.set(e.idNumber, e));
@@ -24,7 +24,7 @@ export class CompanyValidator {
     if (!companyForm.contactPersonIdNumber) throw new Error('Mangler fødselsnummer til kontaktperson.');
     CompanyValidator.validateCompanyName(companyForm.name);
     if (!companyForm.businessAddress) throw new Error('Mangler forretningsadresse.');
-    CompanyValidator.validateAddress(companyForm.businessAddress, 'Forretningsadresse')
+    CompanyValidator.validateAddress(companyForm.businessAddress, 'Forretningsadresse');
 
     CompanyValidator.validateFounders(companyForm);
     CompanyValidator.validateBoard(companyForm.board, companyForm.entities);
@@ -37,7 +37,7 @@ export class CompanyValidator {
     }
   }
 
-  static validateContactPerson(idNumber: string, entities: LegalEntity[]) {
+  public static validateContactPerson(idNumber: string, entities: LegalEntity[]) {
     if (!idNumber) throw new Error('Mangler fødselsnummer på kontaktperson.');
     const index = entities.findIndex(e => e.idNumber === idNumber);
     if (index === -1) {
@@ -45,13 +45,13 @@ export class CompanyValidator {
     }
   }
 
-  static validateLegalEntities(entities: LegalEntity[]) {
+  public static validateLegalEntities(entities: LegalEntity[]) {
     for (const entity of entities) {
       CompanyValidator.validateLegalEntity(entity);
     }
   }
 
-  static validateLegalEntity(entity: LegalEntity) {
+  public static validateLegalEntity(entity: LegalEntity) {
     if (!entity.type) throw new Error('Mangler type for person/selskap.');
     CompanyValidator.validateEntityName(entity.name);
     CompanyValidator.validateEmail(entity.email);
@@ -64,7 +64,7 @@ export class CompanyValidator {
     }
   }
 
-  static validateFounders(companyForm: StartCompanyRequest) {
+  public static validateFounders(companyForm: StartCompanyRequest) {
     if (!companyForm.founders || !companyForm.founders.length) throw new Error('Mangler eiere.');
     let totalStock = 0;
     for (const founder of companyForm.founders) {
@@ -79,10 +79,10 @@ export class CompanyValidator {
     }
   }
 
-  static validateBoard(board: BoardMemberAttributes[], entities: LegalEntity[]) {
-    if (!board || board.length === 0) throw new Error('Selskapet må ha styreleder.');
+  public static validateBoard(boardMembers: BoardMemberAttributes[], entities: LegalEntity[]) {
+    if (!boardMembers || boardMembers.length === 0) throw new Error('Selskapet må ha styreleder.');
     let foundDirector = false;
-    for (const member of board) {
+    for (const member of boardMembers) {
       if (member.role === BoardRole.Chairman) {
         foundDirector = true;
       }
@@ -101,7 +101,7 @@ export class CompanyValidator {
     return false;
   }
 
-  static validateBeneficialOwners(companyForm: StartCompanyRequest, entityMap: Map<string, LegalEntity>) {
+  public static validateBeneficialOwners(companyForm: StartCompanyRequest, entityMap: Map<string, LegalEntity>) {
     const pct25 = companyForm.shares.numberOfShares / 4;
     for (const owner of companyForm.founders) {
       if (entityMap.get(owner.idNumber)!.type === EntityType.Person && owner.numberOfShares >= pct25) {
@@ -118,8 +118,7 @@ export class CompanyValidator {
     }
   }
 
-
-  static validateAddress(address: Address, desc?: string) {
+  public static validateAddress(address: Address, desc?: string) {
     if (!address) throwError('Mangler adresse.', desc);
     if (!address.addressLine1) throwError('Mangler gateadresse.', desc);
     if (!address.country) throwError('Mangler land.', desc);
@@ -127,11 +126,11 @@ export class CompanyValidator {
     if (!address.zipCode) throwError('Mangler postnummer.', desc);
   }
 
-  static validateEntityName(name: string) {
+  public static validateEntityName(name: string) {
     if (!name) throw new Error('Mangler navn.');
   }
 
-  static validateIdNumber(idNumber: string, desc?: string) {
+  public static validateIdNumber(idNumber: string, desc?: string) {
     if (idNumber.length === 9) {
       CompanyValidator.validateOrganisationNumber(idNumber, desc);
     } else if (idNumber.length === 11) {
@@ -141,10 +140,10 @@ export class CompanyValidator {
     }
   }
 
-  static validatePersonNumber(idNumber: string, description?: string) {
+  public static validatePersonNumber(idNumber: string, description?: string) {
     description = description ? `${description}: ` : '';
     if (idNumber.length !== 11) {
-      throw new Error(`${description}Personnummer må være nøyaktig 11 siffer.`)
+      throw new Error(`${description}Personnummer må være nøyaktig 11 siffer.`);
     }
     const num1 = parseInt(idNumber.substring(0, 1));
     const num2 = parseInt(idNumber.substring(1, 2));
@@ -162,14 +161,14 @@ export class CompanyValidator {
     const controlSum2 = num1 * 5 + num2 * 4 + num3 * 3 + num4 * 2 + num5 * 7 + num6 * 6
       + num7 * 5 + num8 * 4 + num9 * 3 + num10 * 2 + num11;
     if (controlSum1 % 11 !== 0 || controlSum2 % 11 !== 0) {
-      throw new Error(`${description}Ugyldig personnummer.`)
+      throw new Error(`${description}Ugyldig personnummer.`);
     }
   }
 
-  static validateOrganisationNumber(idNumber: string, description?: string) {
+  public static validateOrganisationNumber(idNumber: string, description?: string) {
     description = description ? `${description}: ` : '';
     if (idNumber.length !== 9) {
-      throw new Error(`${description}Organisasjonsnummer må være nøyaktig 9 siffer.`)
+      throw new Error(`${description}Organisasjonsnummer må være nøyaktig 9 siffer.`);
     }
     const num1 = parseInt(idNumber.substring(0, 1));
     const num2 = parseInt(idNumber.substring(1, 2));
@@ -184,16 +183,16 @@ export class CompanyValidator {
     const mod = controlSum % 11;
     const controlNum = 11 - mod;
     if (controlNum !== num9) {
-      throw new Error(`${description}Ugyldig organisasjonsnummer.`)
+      throw new Error(`${description}Ugyldig organisasjonsnummer.`);
     }
   }
 
-  static isIdNumberCompany(idNumber: string) {
+  public static isIdNumberCompany(idNumber: string) {
     const num1 = parseInt(idNumber.substring(0, 1));
-    return num1 == 8 || num1 == 9;
+    return num1 === 8 || num1 === 9;
   }
 
-  static getNonAsName(companyName: string) {
+  public static getNonAsName(companyName: string) {
     if (companyName.startsWith('AS')) {
       return companyName.substring(3);
     } else if (companyName.endsWith('AS')) {
@@ -203,7 +202,7 @@ export class CompanyValidator {
     }
   }
 
-  static validateCompanyName(companyName: string) {
+  public static validateCompanyName(companyName: string) {
     if (!companyName) throw new Error('Mangler selskapsnavn.');
     const hasAsInName = companyName.startsWith('AS ') || companyName.endsWith(' AS');
     const nonAsName = CompanyValidator.getNonAsName(companyName);
@@ -225,15 +224,15 @@ export class CompanyValidator {
     }
   }
 
-  static validateEmail(email: string) {
+  public static validateEmail(email: string) {
     if (!email) throw new Error('Mangler e-post');
   }
 
-  static validatePhoneNumber(email: string) {
+  public static validatePhoneNumber(email: string) {
     if (!email) throw new Error('Mangler telefonnummer');
   }
 
-  static validateCompanyCapital(capital: number) {
+  public static validateCompanyCapital(capital: number) {
     if (!capital) {
       throw new Error('Mangler aksjekapital.');
     }
@@ -242,7 +241,7 @@ export class CompanyValidator {
     }
   }
 
-  static validateVingerForm(companyForm: StartCompanyRequest, entityMap: Map<string, LegalEntity>) {
+  public static validateVingerForm(companyForm: StartCompanyRequest, entityMap: Map<string, LegalEntity>) {
     const vingerForm = companyForm.vingerForm;
 
     const boardRightToSign = vingerForm.boardRightToSign;
@@ -261,14 +260,14 @@ export class CompanyValidator {
     }
 
     if (vingerForm.accountantIdNumber) {
-      CompanyValidator.validateIdNumber(vingerForm.accountantIdNumber, "Regnskapsfører");
+      CompanyValidator.validateIdNumber(vingerForm.accountantIdNumber, 'Regnskapsfører');
       if (!CompanyValidator.isIdNumberCompany(vingerForm.accountantIdNumber)) {
         if (!vingerForm.accountantLastName) throw new Error('Mangler etternavn på regnskapsfører.');
       }
     }
 
     if (vingerForm.auditorIdNumber) {
-      CompanyValidator.validateOrganisationNumber(vingerForm.auditorIdNumber, "Revisor");
+      CompanyValidator.validateOrganisationNumber(vingerForm.auditorIdNumber, 'Revisor');
     }
 
     if (vingerForm.ceoIdNumber) {
@@ -283,7 +282,6 @@ export class CompanyValidator {
         vingerForm.bankLogonPreference !== constants.bankLogonPreference.kodebrikke) {
         throw new Error(`Ugyldig innloggingsmetode i bank: ${vingerForm.bankLogonPreference}`);
       }
-
 
       let banker: LegalEntity;
       if (companyForm.ceoIdNumber) {
@@ -336,14 +334,14 @@ export class CompanyValidator {
       }
 
       if (vingerForm.parentCompanyName) {
-        if (!vingerForm.parentCompanyIdNumber) throw new Error("Mangler org.nr for morselskap.");
+        if (!vingerForm.parentCompanyIdNumber) throw new Error('Mangler org.nr for morselskap.');
         if (vingerForm.parentCompanyStockExchange) {
-          if (!vingerForm.parentCompanyISIN) throw new Error("Mangler ISIN-nummer for morselskap.");
+          if (!vingerForm.parentCompanyISIN) throw new Error('Mangler ISIN-nummer for morselskap.');
         }
       }
 
       if (vingerForm.otherAgreementsExist === undefined) {
-        throw new Error("Mangler angivelse om andre avtaler eksisterer.");
+        throw new Error('Mangler angivelse om andre avtaler eksisterer.');
       }
     }
 

@@ -1,13 +1,13 @@
+import ShareTransaction = shareholders.ShareTransaction;
+import {test} from '../src/data/testdata';
+import {shareholders} from '../src/handler_specs/shareholders_handlers';
 import {
   parseShareNumbersString, shareHoldersFromTransactions, shareNumbersToString,
-  sortTransactions
-} from "../src/share_utils";
-import {newDate} from "../src/utils";
-import {shareholders} from "../src/handler_specs/shareholders_handlers";
-import ShareTransaction = shareholders.ShareTransaction;
-import {test} from "../src/data/testdata";
-import makeRuben = test.makeRuben;
-import makePreben = test.makePreben;
+  sortTransactions,
+} from '../src/share_utils';
+import {newDate} from '../src/utils';
+const makeRuben = test.makeRuben;
+const makePreben = test.makePreben;
 import * as chai from 'chai';
 const assert = chai.assert;
 
@@ -43,7 +43,6 @@ describe('share utils', () => {
     assert.equal(shareHolders[0].idNumber, preben.idNumber);
     assert.equal(shareHolders[0].numberOfShares, 95);
     assert.equal(shareHolders[1].numberOfShares, 5);
-
 
     // should return empty shareNumbers for outsold shareholders
     transactions.push({

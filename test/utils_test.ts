@@ -1,5 +1,5 @@
-import {formatDate, formatMoney} from "../src/utils";
 import * as chai from 'chai';
+import {formatDate, formatMoney} from '../src/utils';
 const assert = chai.assert;
 
 describe('utils', () => {

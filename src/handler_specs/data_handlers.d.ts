@@ -1,5 +1,5 @@
-import {AuthedRequest, BaseResponse, LegalEntity} from "../shared";
-import {CardStatus, PaymentType} from "../enums";
+import {CardStatus, PaymentType} from '../enums';
+import {AuthedRequest, BaseResponse, LegalEntity} from '../shared';
 
 export declare namespace data {
 

@@ -1,9 +1,7 @@
-import {AuthedRequest, BaseResponse} from "../shared";
-import {DocumentType} from "../enums";
-import {vinger} from "./vinger_handlers";
+import {DocumentType} from '../enums';
+import {BaseResponse} from '../shared';
 
 export declare namespace documents {
-
 
   interface InitSignSessionRequest {
     signJobAids: string[]

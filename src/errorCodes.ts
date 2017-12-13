@@ -1,4 +1,4 @@
-const _errorCodes = {
+export const errorCodes = {
 
   internalSystemError: 'maur/internal-system-error',
   invalidArgument: 'maur/invalid-argument',
@@ -34,7 +34,5 @@ const _errorCodes = {
   shareholdersBookNotCreated: 'maur/shareholder-book-not-created',
 
   // firebase
-  authRequestFailed: 'auth/network-request-failed'
+  authRequestFailed: 'auth/network-request-failed',
 };
-
-export const errorCodes = _errorCodes;

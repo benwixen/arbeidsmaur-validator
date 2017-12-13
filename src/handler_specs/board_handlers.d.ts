@@ -1,5 +1,5 @@
-import {AuthedRequest, BaseResponse, LegalEntity} from "../shared";
-import {BoardRole, MeetingItemType, MeetingRole, MeetingType} from "../enums";
+import {BoardRole, MeetingItemType, MeetingRole, MeetingType} from '../enums';
+import {AuthedRequest, BaseResponse, LegalEntity} from '../shared';
 
 export declare namespace board {
   interface BoardMemberAttributes {
@@ -26,7 +26,7 @@ export declare namespace board {
     suggestion: string
   }
 
-  export interface MeetingItemAttributes extends SharedMeetingItemAttributes{
+  export interface MeetingItemAttributes extends SharedMeetingItemAttributes {
     meetingVotes: MeetingVoteAttributes[]
   }
 

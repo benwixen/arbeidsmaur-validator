@@ -1,11 +1,11 @@
-const _constants = {
+export const constants = {
 
   systemVersion: '1.0',
 
   boardRightToSign: {
     no: 'no',
     together: 'together',
-    separately: 'separately'
+    separately: 'separately',
   } as ConstantMap,
 
   keyPersonellRightToSign: {
@@ -21,8 +21,6 @@ const _constants = {
     kodebrikke: 'kodebrikke',
   },
 };
-
-export const constants = _constants;
 
 interface ConstantMap {
   [key: string]: string;

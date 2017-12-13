@@ -29,7 +29,7 @@ export enum MeetingItemType { // for saker i generalforsamling
   Ordinary = 'ordinary',
   Statutes = 'statutes',
   DividendRights = 'dividendRights',
-  OwnerRights = 'ownerRights'
+  OwnerRights = 'ownerRights',
 }
 
 export enum MeetingRole {
@@ -57,7 +57,7 @@ export enum CompanyRole { // for users
   Leader = 'leader', // ceo OR board member
   OnBoard = 'onBoard', // board member
   Ceo = 'ceo',
-  Chairman = 'chairman'
+  Chairman = 'chairman',
 }
 
 export enum PaymentType {
