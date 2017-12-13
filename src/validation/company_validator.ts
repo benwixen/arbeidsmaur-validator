@@ -55,6 +55,9 @@ export class CompanyValidator {
     if (!entity.type) throw new Error('Mangler type for person/selskap.');
     CompanyValidator.validateEntityName(entity.name);
     CompanyValidator.validateEmail(entity.email);
+    if (entity.address) {
+      CompanyValidator.validateAddress(entity.address, entity.name);
+    }
     if (!entity.idNumber) throw new Error('Mangler personnummer/org-nummer for: ' + entity.name);
     CompanyValidator.validateIdNumber(entity.idNumber, entity.name);
     if (CompanyValidator.isIdNumberCompany(entity.idNumber)) {
@@ -71,7 +74,7 @@ export class CompanyValidator {
       totalStock += founder.numberOfShares;
       const entity = companyForm.entities.find(e => e.idNumber === founder.idNumber);
       if (!entity) throw new Error('Fant ikke data for stifter: ' + founder.idNumber);
-      CompanyValidator.validateAddress(entity.address!, entity.name);
+      if (!entity.address) throw new Error('Mangler adresse for stifter: ' + entity.name);
     }
     if (totalStock !== companyForm.shares.numberOfShares) {
       throw new Error('Bare ' + totalStock + ' av selskapets ' + companyForm.shares.numberOfShares + ' aksjer ' +
@@ -115,6 +118,7 @@ export class CompanyValidator {
     for (const beneficialOwner of companyForm.vingerForm.beneficialOwners) {
       const entity = entityMap.get(beneficialOwner.idNumber);
       if (!entity) throw new Error('Fant ikke data for rettighetshaver: ' + beneficialOwner.idNumber);
+      if (!entity.address) throw new Error('Mangler adresse for rettighetshaver: ' + entity.name);
       CompanyValidator.validateAddress(entity.address!, entity.name);
     }
   }
