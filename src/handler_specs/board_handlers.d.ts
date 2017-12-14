@@ -93,6 +93,7 @@ export declare namespace board {
   interface InitBoardRequest extends AuthedRequest {
     companyId: number
     board: BoardMemberAttributes[]
+    ceoIdNumber?: string
     entities: LegalEntity[]
   }
 
