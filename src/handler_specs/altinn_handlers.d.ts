@@ -8,12 +8,19 @@ export namespace altinn {
     userName?: string
     systemId?: string
     systemPassword: string
+    verified: boolean
   }
 
-  interface SetAltinnSettingsRequest extends AuthedRequest {
+  interface SubmitSystemCredentialsRequest extends AuthedRequest {
+    systemId: string
+  }
+
+  interface SubmitSystemCredentialsResponse extends BaseResponse {}
+
+  interface SubmitAllCredentialsRequest extends AuthedRequest {
+    systemId: string
     userName: string
     userPassword: string
-    systemId: string
   }
 
   interface SendSMSPinRequest extends AuthedRequest {
