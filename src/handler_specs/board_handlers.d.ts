@@ -5,6 +5,7 @@ export declare namespace board {
   interface BoardMemberAttributes {
     idNumber: string
     role: BoardRole
+    electionDate?: Date
     isCeo?: boolean
   }
 
@@ -92,6 +93,7 @@ export declare namespace board {
 
   interface InitBoardRequest extends AuthedRequest {
     companyId: number
+    yearsToServe: number
     board: BoardMemberAttributes[]
     ceoIdNumber?: string
     entities: LegalEntity[]
