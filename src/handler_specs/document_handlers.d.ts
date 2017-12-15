@@ -12,6 +12,7 @@ export declare namespace documents {
     documentAid: string
     documentName: string
     signJobAid: string
+    signAsPades: boolean
 
     // if PAdES
     signeeName: string
