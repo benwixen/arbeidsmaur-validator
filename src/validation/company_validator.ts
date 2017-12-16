@@ -30,9 +30,11 @@ export class CompanyValidator {
     CompanyValidator.validateBoard(companyForm.board, companyForm.entities);
     CompanyValidator.validateVingerForm(companyForm, entityMap);
     const chairman = companyForm.board.find(member => member.role === BoardRole.Chairman)!;
-    const ceoIdNumber = companyForm.vingerForm.ceoIdNumber;
+    const ceoIdNumber = companyForm.ceoIdNumber;
+
     const contactIdNumber = companyForm.contactPersonIdNumber;
-    if (!(contactIdNumber === chairman.idNumber || contactIdNumber === ceoIdNumber)) {
+
+    if (contactIdNumber !== chairman.idNumber && contactIdNumber !== ceoIdNumber) {
       throw new Error('Kontaktperson (du) må være styreleder eller daglig leder.');
     }
   }
@@ -273,11 +275,6 @@ export class CompanyValidator {
 
     if (vingerForm.auditorIdNumber) {
       CompanyValidator.validateOrganisationNumber(vingerForm.auditorIdNumber, 'Revisor');
-    }
-
-    if (vingerForm.ceoIdNumber) {
-      CompanyValidator.validatePersonNumber(vingerForm.ceoIdNumber);
-      if (!vingerForm.ceoLastName) throw new Error('Mangler etternavn på daglig leder.');
     }
 
     if (vingerForm.autoBanking === undefined) throw new Error('Mangler valg om selvbetjent bankopprettelse.');

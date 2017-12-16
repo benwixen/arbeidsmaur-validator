@@ -31,8 +31,6 @@ export declare namespace vinger {
     companyId?: number
 
     ultimateBeneficialOwners: string // json-encoded
-    ceoIdNumber?: string
-    ceoLastName?: string
     boardRightToSign: string
     keyPersonellRightToSign: string
     accountantIdNumber?: string
