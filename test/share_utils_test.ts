@@ -58,6 +58,15 @@ describe('share utils', () => {
     assert.equal(shareHolders[0].idNumber, preben.idNumber);
     assert.equal(shareHolders[0].shareNumbers, '1-100');
     assert.equal(shareHolders[1].shareNumbers, undefined);
+
+    // should also work in non-sharenumber mode (used for previewing on InitShareholders)
+    for (const transaction of transactions) {
+      transaction.shareNumbers = undefined as any;
+    }
+    shareHolders = shareHoldersFromTransactions(transactions, owners, undefined, false);
+    assert.equal(shareHolders.length, 2);
+    assert.equal(shareHolders[0].idNumber, preben.idNumber);
+    assert.equal(shareHolders[0].numberOfShares, 100);
   });
 
   it('should sort transactions by date', () => {

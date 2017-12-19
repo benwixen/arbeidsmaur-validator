@@ -80,8 +80,7 @@ export interface CompanyAttributes {
 interface CompanySharesAttributes {
   totalCapital: number
   numberOfShares: number
-  paymentDeadline: Date
-  fromDate: Date
+  paymentDeadline?: Date
 
   shareholdersFirstRefusal?: FirstRefusalType
   shareholdersFirstRefusalNote?: string // if custom

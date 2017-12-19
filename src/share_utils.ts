@@ -101,8 +101,9 @@ export function shareBlocksForOwner(transactions: shareholders.ShareTransaction[
 
 // calculates number of shares, and shareNumbers for each owner
 // transactions is assumed to be sorted by date
-export function shareHoldersFromTransactions(transactions: ShareTransaction[],
-                                             owners: LegalEntity[], atTime?: Date): shareholders.ShareHolder[] {
+export function shareHoldersFromTransactions(transactions: ShareTransaction[], owners: LegalEntity[],
+  atTime?: Date, shareNumMode = true): shareholders.ShareHolder[] {
+
   const shareHolders = new Map<string, shareholders.ShareHolder>();
   const sharesOwned = new Map<string, number[]>();
   for (const transaction of transactions) {
@@ -117,22 +118,28 @@ export function shareHoldersFromTransactions(transactions: ShareTransaction[],
     }
     buyer.numberOfShares += transaction.numberOfShares;
     buyer.lastUpdate = transaction.transactionTime;
-    let shares = sharesOwned.get(buyerIdNumber);
-    if (!shares) shares = [];
-    shares = shares.concat(parseShareNumbersString(transaction.shareNumbers));
-    sharesOwned.set(buyerIdNumber, shares);
     if (transaction.sellerIdNumber) {
       const seller = shareHolders.get(transaction.sellerIdNumber);
       if (!seller) throw new Error('In conversion, couldnt find seller with id: ' + transaction.sellerIdNumber);
       seller.numberOfShares -= transaction.numberOfShares;
       seller.lastUpdate = transaction.transactionTime;
-      const sellerShares = sharesOwned.get(transaction.sellerIdNumber)!;
-      const soldShares = parseShareNumbersString(transaction.shareNumbers);
-      removeShares(sellerShares, soldShares, true);
+    }
+    if (shareNumMode) {
+      let shares = sharesOwned.get(buyerIdNumber);
+      if (!shares) shares = [];
+      shares = shares.concat(parseShareNumbersString(transaction.shareNumbers));
+      sharesOwned.set(buyerIdNumber, shares);
+      if (transaction.sellerIdNumber) {
+        const sellerShares = sharesOwned.get(transaction.sellerIdNumber)!;
+        const soldShares = parseShareNumbersString(transaction.shareNumbers);
+        removeShares(sellerShares, soldShares, true);
+      }
     }
   }
   const shareholderArr = Array.from(shareHolders.values());
-  shareholderArr.forEach(sh => sh.shareNumbers = shareNumbersToString(sharesOwned.get(sh.idNumber)!));
+  if (shareNumMode) {
+    shareholderArr.forEach(sh => sh.shareNumbers = shareNumbersToString(sharesOwned.get(sh.idNumber)!));
+  }
   return shareholderArr;
 }
 
