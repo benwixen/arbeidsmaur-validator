@@ -209,14 +209,17 @@ export class CompanyValidator {
     }
   }
 
-  public static validateCompanyName(companyName: string) {
+  public static validateCompanyName(companyName: string, onlyAs = true) {
     if (!companyName) throw new Error('Mangler selskapsnavn.');
-    const hasAsInName = companyName.startsWith('AS ') || companyName.endsWith(' AS');
     const nonAsName = CompanyValidator.getNonAsName(companyName);
     if (nonAsName.length < 3) {
       throw new Error('Firmanavnet må være på minst tre bokstaver.');
-    } else if (!hasAsInName) {
-      throw new Error('Firmanavnet må slutte eller begynne med bokstavene AS.');
+    }
+    if (onlyAs) {
+      const hasAsInName = companyName.startsWith('AS ') || companyName.endsWith(' AS');
+      if (!hasAsInName) {
+        throw new Error('Firmanavnet må slutte eller begynne med bokstavene AS.');
+      }
     }
     const lowerCaseNonAsName = nonAsName.toLowerCase();
     for (const country of countries) {

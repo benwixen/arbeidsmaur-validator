@@ -66,7 +66,6 @@ const companyReq: StartCompanyRequest = {
     totalCapital: 30000,
     numberOfShares: 100,
     paymentDeadline: new Date(),
-    fromDate: new Date(),
     altinnUpToDate: false,
   },
   foundationDate: new Date(),
