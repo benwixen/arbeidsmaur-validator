@@ -302,9 +302,6 @@ export class CompanyValidator {
       if (!vingerForm.contactTaxCountry) throw new Error('Mangler skattemessig hjemland for bankkontakt.');
 
       if (typeof(vingerForm.expectedRevenue) !== 'number') throw new Error('Mangler forventet omsetning.');
-      if (typeof(vingerForm.expectedMaxMonthlyRevenue) !== 'number') {
-        throw new Error('Mangler maksimal forventet omsetning.');
-      }
 
       if (typeof(vingerForm.transfersAbroadPerMonth) !== 'number') {
         throw new Error('Mangler antall utenlandsoverføringer.');
@@ -343,10 +340,6 @@ export class CompanyValidator {
         if (vingerForm.parentCompanyStockExchange) {
           if (!vingerForm.parentCompanyISIN) throw new Error('Mangler ISIN-nummer for morselskap.');
         }
-      }
-
-      if (vingerForm.otherAgreementsExist === undefined) {
-        throw new Error('Mangler angivelse om andre avtaler eksisterer.');
       }
     }
 

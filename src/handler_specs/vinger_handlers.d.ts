@@ -44,10 +44,7 @@ export declare namespace vinger {
     contactAmericanTaxId?: string
     bankLogonPreference: string
 
-    capitalExpansionDesc?: string
-
     expectedRevenue?: number
-    expectedMaxMonthlyRevenue?: number
 
     transfersAbroadPerMonth?: number
     transfersAbroadAmountPerMonth?: number
@@ -64,8 +61,6 @@ export declare namespace vinger {
     parentCompanyIdNumber?: string
     parentCompanyStockExchange?: string
     parentCompanyISIN?: string
-
-    otherAgreementsExist: boolean
 
     extraComments?: string
   }
