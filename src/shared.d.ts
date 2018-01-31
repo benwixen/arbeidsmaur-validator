@@ -1,4 +1,4 @@
-import {EntityType, FirstRefusalType} from './enums';
+import {EntityType, FirstRefusalType, OrganizationForm} from './enums';
 import {vinger} from './handler_specs/vinger_handlers';
 import VingerFormAttributes = vinger.VingerFormAttributes;
 
@@ -69,6 +69,7 @@ export interface CompanyAttributes {
   foundationDate: Date
   businessAddress: Address
   postalAddress: Address
+  organizationForm: OrganizationForm
 
   /* unknown for freshly joined Dronning-companies */
   shares?: CompanySharesAttributes

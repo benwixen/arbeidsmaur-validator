@@ -20,6 +20,8 @@ export const constants = {
     bankid: 'bankid',
     kodebrikke: 'kodebrikke',
   },
+
+  skoleStopSteps: ['selskapsform', 'navn', 'eiere', 'ledere', 'adresse', 'regnskap', 'oppsummering'],
 };
 
 interface ConstantMap {

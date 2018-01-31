@@ -25,6 +25,10 @@ export const errorCodes = {
   altinnNoMoreOneTimeCodes: 'maur/altinn-no-more-codes',
   altinnWaitingForFormTask: 'maur/altinn-waiting-for-formtask',
 
+  // vinger
+  draftExpired: 'maur/draft-expired',
+  draftSubmitted: 'maur/draft-submitted',
+
   // signatures
   optimisticFailure: 'maur/optimistic-failure',
   signatureNameMismatch: 'maur/signature-name-mismatch',

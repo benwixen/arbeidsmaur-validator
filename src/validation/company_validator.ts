@@ -209,16 +209,21 @@ export class CompanyValidator {
     }
   }
 
-  public static validateCompanyName(companyName: string, onlyAs = true) {
+  public static validateCompanyName(companyName: string, enkLastName?: string) {
     if (!companyName) throw new Error('Mangler selskapsnavn.');
     const nonAsName = CompanyValidator.getNonAsName(companyName);
     if (nonAsName.length < 3) {
       throw new Error('Firmanavnet må være på minst tre bokstaver.');
     }
-    if (onlyAs) {
+    if (!enkLastName) {
       const hasAsInName = companyName.startsWith('AS ') || companyName.endsWith(' AS');
       if (!hasAsInName) {
         throw new Error('Firmanavnet må slutte eller begynne med bokstavene AS.');
+      }
+    } else {
+      const hasLastNameInName = companyName.startsWith(enkLastName + ' ') || companyName.endsWith(' ' + enkLastName);
+      if (!hasLastNameInName) {
+        throw new Error('Firmanavnet må slutte eller begynne med etternavnet ditt.');
       }
     }
     const lowerCaseNonAsName = nonAsName.toLowerCase();

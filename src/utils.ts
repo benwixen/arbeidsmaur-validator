@@ -2,7 +2,6 @@ import MeetingVoteAttributes = board.MeetingVoteAttributes;
 import {BoardRole, EntityType, MeetingItemType} from './enums';
 import {board} from './handler_specs/board_handlers';
 import MeetingAttendanceAttributes = board.MeetingAttendanceAttributes;
-import BoardMemberAttributes = board.BoardMemberAttributes;
 import {vinger} from './handler_specs/vinger_handlers';
 import {Address, LegalEntity} from './shared';
 import FounderAttributes = vinger.FounderAttributes;
@@ -166,17 +165,7 @@ export function sortLegalEntities(owners: LegalEntity[]) {
   owners.sort((a, b) => a.name < b.name ? -1 : 1);
 }
 
-export function boardRoleName(role?: BoardRole, isCeo?: boolean) {
-  if (isCeo) {
-    switch (role) {
-      case BoardRole.Chairman:
-        return 'Daglig leder og styreleder';
-      case BoardRole.Member:
-        return 'Daglig leder og styremedlem';
-      default:
-        return 'Daglig leder';
-    }
-  }
+export function boardRoleName(role?: BoardRole) {
   switch (role) {
     case BoardRole.Chairman:
       return 'Styreleder';
@@ -191,14 +180,6 @@ export function boardRoleName(role?: BoardRole, isCeo?: boolean) {
     default:
       throw new Error(`Unknown board role: ${role}`);
   }
-}
-
-export function getBankContact(boardMembers: BoardMemberAttributes[], entityMap: Map<string, LegalEntity>) {
-  let banker = boardMembers.find(member => member.isCeo === true);
-  if (!banker) {
-    banker = boardMembers.find(member => member.role === BoardRole.Chairman)!;
-  }
-  return entityMap.get(banker.idNumber)!;
 }
 
 export function hasMotherCompany(founders: FounderAttributes[], entityMap: Map<string, LegalEntity>,
@@ -217,25 +198,5 @@ export function hasMotherCompany(founders: FounderAttributes[], entityMap: Map<s
   const companyShare = companyShares / numberOfShares;
   if (companyShare <= 0.5) {
     return false;
-  }
-}
-
-export function extractCeo(boardMembers: BoardMemberAttributes[]) {
-  const newBoard = boardMembers.concat();
-  const ceoIndex = newBoard.findIndex(member => member.isCeo === true);
-  if (ceoIndex !== -1) {
-    const ceo = newBoard[ceoIndex];
-    if (!ceo.role) {
-      newBoard.splice(ceoIndex, 1);
-    }
-    return {
-      ceoIdNumber: ceo.idNumber,
-      board: newBoard,
-    };
-  } else {
-    return {
-      ceoIdNumber: undefined,
-      board: newBoard,
-    };
   }
 }

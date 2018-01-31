@@ -67,7 +67,48 @@ export declare namespace vinger {
 
   /* Request and response specs */
 
+  interface JoinStartupSchoolRequest {
+    email: string
+    firstStep: string
+    noRedirect?: boolean
+  }
+
+  interface JoinStartupSchoolResponse extends BaseResponse {}
+
+  interface NextLessonRequest {
+    draftAid: string
+    nextStep: string
+  }
+
+  interface NextLessonResponse extends BaseResponse {}
+
+  interface CreateVingerDraftRequest {
+    email: string
+    json?: string
+  }
+
+  interface CreateVingerDraftResponse extends BaseResponse {
+    alphaId: string
+  }
+
+  interface GetVingerDraftRequest {
+    alphaId: string
+  }
+
+  // definition is on frontend
+  // interface GetVingerDraftResponse extends BaseResponse {}
+
+  interface SaveVingerDraftRequest {
+    alphaId: string
+    draftVersion: number
+    json: string
+  }
+
+  interface SaveVingerDraftResponse extends BaseResponse {}
+
   interface StartCompanyRequest extends CompanyAttributes {
+    draftAid: string
+    electronic: boolean
     ceoIdNumber?: string
     contactPersonIdNumber: string
     entities: LegalEntity[]
@@ -78,6 +119,14 @@ export declare namespace vinger {
 
   interface StartCompanyResponse extends BaseResponse {
     signJobAids: string[]
+  }
+
+  interface UpgradeVingerToEsignRequest {
+    draftAid: string
+  }
+
+  interface UpgradeVingerToEsignResponse extends BaseResponse {
+    signJobAid?: string
   }
 
   interface GetCompaniesInProgressRequest {}

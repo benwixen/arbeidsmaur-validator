@@ -45,6 +45,7 @@ export enum MeetingRole {
 
 export enum DocumentType {
   Stiftdok = 'stiftdok',
+  StiftdokPaper = 'stiftdokPaper',
   Styreprotokoll = 'styreprotokoll',
   Generalprotokoll = 'generalprotokoll',
   EkstraOrdProtokoll = 'ekstraordprotokoll',
@@ -77,4 +78,5 @@ export enum CardStatus {
 
 export enum OrganizationForm {
   Aksjeselskap = 'AS',
+  Enkeltpersonforetak = 'ENK',
 }

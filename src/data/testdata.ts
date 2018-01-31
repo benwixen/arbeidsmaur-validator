@@ -31,7 +31,7 @@ export class test {
   public static makePreben = (): LegalEntity => ({
     type: EntityType.Person,
     name: 'Preben Ludviksen',
-    email: `preben${randomInt(0, 1000)}@leben.no`,
+    email: `preben-${randomInt(0, 1000000)}@leben.no`,
     idNumber: '05118639709',
     address: test.rorvik,
   })
@@ -39,7 +39,7 @@ export class test {
   public static makeRuben = (): LegalEntity => ({
     type: EntityType.Person,
     name: 'Ruben Ludviksen',
-    email: `ruben${randomInt(0, 1000)}@luben.no`,
+    email: `ruben-${randomInt(0, 1000000)}@luben.no`,
     idNumber: '03028436946',
     address: test.hetlevik,
   })
@@ -47,7 +47,7 @@ export class test {
   public static makeLaConsulting = (): LegalEntity => ({
     type: EntityType.Company,
     name: 'LA Consulting AS',
-    email: `la_${randomInt(0, 1000)}@consulting.no`,
+    email: `la_${randomInt(0, 1000000)}@consulting.no`,
     idNumber: '998391946',
     address: test.strusshamn,
     contactName: 'Leif Andreas Ludviksen',

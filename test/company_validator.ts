@@ -2,7 +2,7 @@ import BoardMemberAttributes = board.BoardMemberAttributes;
 import {test} from '../src/data/testdata';
 import StartCompanyVingerForm = vinger.StartCompanyVingerForm;
 import Owner = vinger.FounderAttributes;
-import {BoardRole} from '../src/enums';
+import {BoardRole, OrganizationForm} from '../src/enums';
 import FounderAttributes = vinger.FounderAttributes;
 import {board} from '../src/handler_specs/board_handlers';
 import {vinger} from '../src/handler_specs/vinger_handlers';
@@ -55,6 +55,9 @@ const vingerForm: StartCompanyVingerForm = {
   keyPersonellRightToSign: 'boardHead',
 };
 const companyReq: StartCompanyRequest = {
+  electronic: true,
+  draftAid: 'lollocopter',
+  organizationForm: OrganizationForm.Aksjeselskap,
   status: 'draft',
   name: 'Utvikler Ludviksen AS',
   contactPersonIdNumber: preben.idNumber,
