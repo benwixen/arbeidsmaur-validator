@@ -26,19 +26,7 @@ export declare namespace vinger {
     beneficialOwners: FounderAttributes[]
   }
 
-  // db-compliant
-  export interface VingerFormAttributes {
-    companyId?: number
-
-    ultimateBeneficialOwners: string // json-encoded
-    boardRightToSign: string
-    keyPersonellRightToSign: string
-    accountantIdNumber?: string
-    accountantLastName?: string
-    auditorIdNumber?: string
-
-    autoBanking: boolean
-
+  interface BankingAttributes {
     contactTaxCountry: string
     contactForeignTaxId?: string
     contactAmericanTaxId?: string
@@ -61,7 +49,20 @@ export declare namespace vinger {
     parentCompanyIdNumber?: string
     parentCompanyStockExchange?: string
     parentCompanyISIN?: string
+  }
 
+  // db-compliant
+  export interface VingerFormAttributes extends BankingAttributes {
+    companyId?: number
+
+    ultimateBeneficialOwners: string // json-encoded
+    boardRightToSign: string
+    keyPersonellRightToSign: string
+    accountantIdNumber?: string
+    accountantLastName?: string
+    auditorIdNumber?: string
+
+    autoBanking: boolean
     extraComments?: string
   }
 
@@ -69,7 +70,6 @@ export declare namespace vinger {
 
   interface JoinStartupSchoolRequest {
     email: string
-    firstStep: string
     noRedirect?: boolean
   }
 
