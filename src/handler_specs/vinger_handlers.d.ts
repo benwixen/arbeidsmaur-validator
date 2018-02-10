@@ -84,7 +84,7 @@ export declare namespace vinger {
 
   interface CreateVingerDraftRequest {
     email: string
-    json?: string
+    json?: any
   }
 
   interface CreateVingerDraftResponse extends BaseResponse {

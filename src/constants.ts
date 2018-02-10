@@ -20,6 +20,10 @@ export const constants = {
     bankid: 'bankid',
     kodebrikke: 'kodebrikke',
   },
+
+  vingerSteps: ['navn', 'aktivitet', 'eiere', 'ledere', 'adresse', 'vedtekter', 'regnskap', 'bank', 'oppsummering'],
+  vingerStepNames: ['Firmanavn', 'Aktivitet', 'Aksjer og eiere', 'Styre og daglig leder', 'Adresse', 'Vedtekter',
+    'Regnskapsfører', 'Bankdetaljer'],
 };
 
 interface ConstantMap {
